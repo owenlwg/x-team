@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="game_text">
+   	  <!-- 1 -->
+　　        <item>ROC1.12版本无疑是人族玩家最为怀念的一个时期。 2003年年底在韩国进行WCG2003魔兽争霸3项目的决赛中SK.Insomnia以2：1击败中国人族选手ChinaHuman从而登上世界冠军宝座的时候， 很少人能预料到这竟然会是人族最后的辉煌。 然而不久之后， 暴雪制作组在短短一个多星期之内发布的四个升级补丁使人族堕落到万丈深渊， 1.13到1.14补丁中对人族全范围大幅度的削弱似乎宣告了人族凭借双矿横行天下时代已经结束！ 而WCG2003的新科状元， 被称为完美人族的SK.Insomnia也迎来了自己职业生涯中的第一次低谷</item>
+　　        <item>颇为遗憾的RTB-II，决赛未能由中韩各一队来演绎，但两支老牌韩国劲旅的精彩表演应该足以满足观众挑剔的品味，且第二个登场的Susiria.WeRRa更是上演了个人秀，将对手三人一并allkill。此战是Susiria挟做掉Sweet[SAINT]的余威对阵SAINT战队主力战将BestWolf；两个韩国的顶尖高手在这演绎过无数诗史般战役的LostTemple上，将会带给我们怎样的精彩呢？</item>
+　　        <item>六月，上海，ACON4总决赛成了所有War3玩家目光的焦点，来自全世界20个国家和地区的16位选手经过重重选拔，终于汇聚一堂，逐鹿中原的好戏开始上演。而代表中国出战的NE玩家Yoliny.Suho更是在8进4的比赛中，直落两盘将风头正劲的一代兽王4K.Grubby淘汰出局，固然最终屈居第四，但Suho与Grubby合力在经典地图LostTemple上的这场对决，却毋庸置疑的成为了War3史上的最经典战役之一！</item>
+　　        <item>当我们习惯以版本的更新将一个即时战略游戏区区数年的生命划分成若干个时间段时，英雄就成了赋予游戏以精彩的角色，而TFT1.12时代让我们所有人记住了这个名字——St_GoStop。作为War3届传奇UD选手MyOnlyStar的徒弟，混乱之治后期异军突起的UD新人，GoStop的实力其实早已青出于蓝而胜于蓝，只是Star长期作为UD的精神领袖，其地位实在无人能撼。</item>
+ 	  <item>这场无限经典战役的主人公都是在亚洲战网乃至世界战场叱诧风云的人，SK.SWEET，亚洲战网第一个到达50级的UD鬼才，将三英雄幻化成身体一部分展现绚丽魔法攻击组合的邪恶之源，他享有亚洲鬼王的美誉，他的天地双鬼打遍天下无敌手，所在的SK战队更是被人们誉为全明星战队！而他的对手Spirit_Moon则是当今风头正劲的NE怪才。在ROC1.04时代，就是他的3线操作，让所有的玩家如痴如醉。他的意识和创意已经达到了另一个高深的境界，经常在比赛中给大家带来意想不到的战术，因此被广大玩家称为E.T外星人。</item>
+	  <!-- 6 -->
+　　        <item>时光飞逝，弹指间WAR3已经伴随我们走过了将近3年的峥嵘岁月，期间数不清的英雄伴随老版本逐渐淡去，又有无数豪杰伴随着新版本的到来而诞生。能始终如一活跃在战场上的可谓少之又少，这其中的代表人物就是有着欧洲兽人皇帝之称的Grubby。在欧洲打败过所有高手的他已经有了高处不胜寒的感觉。两届WC3L大师的加冕就是他最好的证明，废话流这种行为艺术更是为广大FANS所津津乐道，如今的他第三次站到了王座上，等待者生命中宿敌的出现。</item>
+　　        <item>Zacard，这是一个令许多玩家谈兽色变的ID，勇猛和凶悍的代名词！自从2004年下半年加入SK国际纵队后，Zacard每天都在不断取得进步。这位在2004年8月底的欧韩明星对抗赛中连斩MadFrog、Zeus[19]、FaTC三员大将，一夜之间扬名立万的兽族选手从未停下前进的铁蹄。在之后美国旧金山举行的WCG2004决赛阶段中SK.Zacard直落两盘干净利落地将夺冠大热门Spirit_Moon斩于马下，尽管在随后的决赛中1：2惜败于兽族皇帝4K.Grubby屈居亚军，但这并不妨碍SK.Zacard被许多玩家认为是世界上最优秀的兽族选手。</item>
+　　        <item>MaDFroG宣布退出WAR3后引起了广大UD的强烈反映。又一代的鬼王隐退江湖，用天地双鬼战胜我国老将EAT估计是大家记忆最深刻的一幕。当时CCTV5的电子竞技栏目播出了该比赛的VOD。这次给大家带来的更是欧洲鬼王MaDFroG在其TFT生涯中最经典的一场，FroG诡异的操作，灵活的打法在TwistedMeadows这张地图上面体现得淋漓尽致。真正的高手就是如此，而人族大师[64AMD]Crimson在我们FroG特有的战术思路面前只能往返在自己的主矿和分矿之间，终于抓住了FroG一次失误，全歼了FroG的部队，由此，在我们都以为比赛结束的时候，看看FroG怎么翻盘吧！</item>
+　　        <item>War3战场上的Kenshin与漫画中的剑心有着同样俊美的外表，同样灵动的技巧，截然相反的是，后者卸去拔刀斋的重担，而前者却披上了军装，留存于Fans们的记忆之中。知己，人生得一知己，足矣；对于绝顶高手而言对手更是远甚于知己了解自己的人。很幸运，在Kenshin的War3生涯中出现了这么一个对手，他其貌不扬，却有着与Kenshin同样迅捷的手法；他憨态可掬，却有着一个光彩夺目的ID。我们叫他Rainbow！</item>
+ 	  <item>WCG一直是Moon的一个心结，作为一个顶尖的高手却一直没有参加世界大赛的机会，在WCG2005韩国预选赛中，一路艰苦战胜Sweet等人的Moon终于到了最终的8强赛，然而这样的好运却没有使Moon一直走下去，在8强赛中对阵不死天王Fov，Moon再次倒在了WCG的门外。紧张的第三场TM，Moon从一开始就处于被动，然而不甘心失败的Moon打出了一场漂亮的反击战，让占尽优势Fov打到经济枯竭，双方在无矿的基础上进行英雄RPG大战，最终苦命的Moon在不死英雄双杀的攻击下无奈输掉了比赛，特殊的场合和精彩的比赛成就了这最后一场十大经典战役。</item>
+　　    </string-array>
+ 	<string-array name="game_title">  
+ 	    <!-- 1 -->
+ 	    <item>Insomnia vs Grubby</item>
+ 	    <item>Susiria vs Bestwolf</item>
+ 	    <item>Grubby vs Suho</item>
+ 	    <item>Gostop vs Wise_XY</item>
+ 	    <item>Sweet vs Moon</item> 	    
+ 	    <!-- 6 -->
+ 	    <item>Grubby vs MadFroG</item>
+ 	    <item>Gostop vs Zacard</item>
+ 	    <item>MadFrog vs Crimson</item>
+ 	    <item>Kenshin vs Rainbow</item>
+ 	    <item>4K.Fov vs Moon</item>
+   	</string-array>
+   	<string-array name="game_title_pre">  
+ 	    <!-- 1 -->
+ 	    <item>十大经典战役之一</item>
+ 	    <item>十大经典战役之二</item>
+ 	    <item>十大经典战役之三</item>
+ 	    <item>十大经典战役之四</item>
+ 	    <item>十大经典战役之五</item> 	    
+ 	    <!-- 6 -->
+ 	    <item>十大经典战役之六</item>
+ 	    <item>十大经典战役之七</item>
+ 	    <item>十大经典战役之八</item>
+ 	    <item>十大经典战役之九</item>
+ 	    <item>十大经典战役之十</item>
+   	</string-array>
+</resources>
