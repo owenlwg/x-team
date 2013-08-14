@@ -25,8 +25,13 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 /**
  * Demonstrates a "screen-slide" animation using a {@link ViewPager}. Because {@link ViewPager}
@@ -44,6 +49,7 @@ public class ScreenSlideActivity extends FragmentActivity {
      * The number of pages (wizard steps) to show in this demo.
      */
     private static final int NUM_PAGES = 10;
+    private static final String ARG_PAGE = "ARG_PAGE";
 
     /**
      * The pager widget, which handles animation and allows swiping horizontally to access previous
@@ -68,10 +74,6 @@ public class ScreenSlideActivity extends FragmentActivity {
         mPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
-                // When changing pages, reset the action bar actions since they are dependent
-                // on which page is currently active. An alternative approach is to have each
-                // fragment expose actions itself (rather than the activity exposing actions),
-                // but for simplicity, the activity provides the actions in this sample.
                 invalidateOptionsMenu();
             }
         });
@@ -125,6 +127,7 @@ public class ScreenSlideActivity extends FragmentActivity {
      */
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
 
+    	
         public ScreenSlidePagerAdapter(FragmentManager fm) {
 			super(fm);
 		}
@@ -136,7 +139,68 @@ public class ScreenSlideActivity extends FragmentActivity {
 
 		@Override
 		public Fragment getItem(int position) {
-			return ScreenSlidePageFragment.create(position);
+            ScreenSlidePageFragment fragment = new ScreenSlidePageFragment();
+            Bundle args = new Bundle();
+            args.putInt(ARG_PAGE, position);
+            fragment.setArguments(args);
+            return fragment;
 		}
+    }
+    
+    public class ScreenSlidePageFragment extends Fragment {
+        /**
+         * The argument key for the page number this fragment represents.
+         */
+        public static final String ARG_PAGE = "page";
+
+        /**
+         * The fragment's page number, which is set to the argument value for {@link #ARG_PAGE}.
+         */
+        private int mPageNumber;
+        
+        private String[] mTitles;
+        private String[] mDescriptions;
+        private String[] mTitlePres;
+        
+        private TextView mTvTitle;
+        private TextView mTvDescription;
+
+        public ScreenSlidePageFragment() {}
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            mPageNumber = getArguments().getInt(ARG_PAGE);
+            mTitles = getResources().getStringArray(R.array.game_title);
+            mDescriptions = getResources().getStringArray(R.array.game_text);
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                Bundle savedInstanceState) {
+            // Inflate the layout containing a title and body text.
+            ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_screen_slide_page, 
+            													container, false);
+
+            // Set the title view to show the page number.
+            mTvTitle = ((TextView) rootView.findViewById(android.R.id.text1));
+            mTvDescription = ((TextView) rootView.findViewById(R.id.description));
+            
+            int resId = getResources().getIdentifier("a" + (mPageNumber + 1), "drawable", getActivity().getPackageName());
+            ((ImageView) rootView.findViewById(R.id.imageview)).setImageResource(resId);
+            mTvTitle.setText(mTitles[mPageNumber]);
+            mTvDescription.setText("        " + mDescriptions[mPageNumber]);
+            
+            return rootView;
+        }
+
+        /**
+         * Returns the page number represented by this fragment object.
+         */
+        public int getPageNumber() {
+            return mPageNumber;
+        }
+        
+
     }
 }

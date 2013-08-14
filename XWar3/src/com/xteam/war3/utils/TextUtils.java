@@ -1,7 +1,25 @@
 package com.xteam.war3.utils;
 
+import android.content.Context;
+import android.graphics.Typeface;
+
 public class TextUtils {
 	
+	private Context mContext;
+	
+	public TextUtils(Context context) {
+		mContext = context;
+	}
+	
+	public Typeface getBoldTypeface() {
+		Typeface typeface = Typeface.createFromAsset(mContext.getAssets(), "Roboto-Bold.ttf");
+		return typeface;
+	}
+
+	public Typeface getNormalTypeface() {
+		Typeface typeface = Typeface.createFromAsset(mContext.getAssets(), "FT-Regular.ttf");
+		return typeface;
+	}
 	public static String ToDBC(String input) {
 		   char[] c = input.toCharArray();
 		   for (int i = 0; i< c.length; i++) {

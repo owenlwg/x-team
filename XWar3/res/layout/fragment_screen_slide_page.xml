@@ -12,57 +12,77 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
-  -->
+-->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/bg_1"
     android:paddingLeft="10dp"
-    android:paddingRight="10dp">
-    
-        <TextView 
-            android:id="@+id/title_pre"
-            style="?android:textAppearanceMedium"
-            android:textStyle="bold"
+    android:paddingRight="10dp" 
+    android:background="@color/gray">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
+    <ImageView
+        android:id="@+id/imageview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:scaleType="centerCrop"
+        android:src="@drawable/a1" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:background="#ac000000"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@android:id/text1"
+            style="?android:textAppearanceLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="40dp"
+            android:gravity="center"
+            android:textColor="@color/dark_red" />
+
+        <Button
+            android:id="@+id/button_play"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/button_play_selector" />
+    </RelativeLayout>
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:textColor="#660000"
-            />
-        <TextView android:id="@android:id/text1"
-            style="?android:textAppearanceMedium"
-            android:textStyle="bold"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:textColor="#660000"
-            />
-        <ImageView
-            android:id="@+id/imageview"
-            android:layout_margin="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="10dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/a1"
-            android:background="@android:color/transparent" />
-        <ScrollView
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent" >
-	
-	        <TextView
-	            android:id="@+id/description"
-	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content" 
-	            android:lineSpacingMultiplier="1.2"
-	            android:textSize="15sp"
-	            android:textColor="#333333"/>
-   		</ScrollView>
+            android:layout_alignParentTop="true"
+            android:orientation="vertical"
+            android:paddingBottom="5dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp" >
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineSpacingMultiplier="1.5"
+                android:textSize="17sp" />
+        </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

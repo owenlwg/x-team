@@ -52,7 +52,6 @@ public class ScreenSlidePageFragment extends Fragment {
     private String[] mDescriptions;
     private String[] mTitlePres;
     
-    private TextView mTvPretitle;
     private TextView mTvTitle;
     private TextView mTvDescription;
     
@@ -78,7 +77,6 @@ public class ScreenSlidePageFragment extends Fragment {
         mPageNumber = getArguments().getInt(ARG_PAGE);
         mTitles = getResources().getStringArray(R.array.game_title);
         mDescriptions = getResources().getStringArray(R.array.game_text);
-        mTitlePres = getResources().getStringArray(R.array.game_title_pre);
     }
 
     @Override
@@ -89,13 +87,11 @@ public class ScreenSlidePageFragment extends Fragment {
         													container, false);
 
         // Set the title view to show the page number.
-        mTvPretitle = ((TextView) rootView.findViewById(R.id.title_pre));
         mTvTitle = ((TextView) rootView.findViewById(android.R.id.text1));
         mTvDescription = ((TextView) rootView.findViewById(R.id.description));
         
         int resId = getResources().getIdentifier("a" + (mPageNumber + 1), "drawable", getActivity().getPackageName());
         ((ImageView) rootView.findViewById(R.id.imageview)).setImageResource(resId);
-        mTvPretitle.setText(mTitlePres[mPageNumber]);
         mTvTitle.setText(mTitles[mPageNumber]);
         mTvDescription.setText("        " + mDescriptions[mPageNumber]);
         

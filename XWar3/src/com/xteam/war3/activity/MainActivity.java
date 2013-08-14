@@ -1,27 +1,21 @@
 package com.xteam.war3.activity;
 
-import android.app.Activity;
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar.Tab;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.HorizontalScrollView;
-import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
-import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
-import android.widget.TextView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 
-public class MainActivity extends Activity {
+public class MainActivity extends SherlockFragmentActivity implements ActionBar.TabListener{
 
-	private Button mButton;
-	private TextView mTvTitle;
-	private LinearLayout mLinearLayout;
 	private Context mContext;
+	private ViewPager mViewPager;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,40 +24,65 @@ public class MainActivity extends Activity {
 		
 		setContentView(R.layout.main);
 		
-		mTvTitle = (TextView) findViewById(R.id.title);
-		mTvTitle.setShadowLayer(10F, -5F, 6F, Color.BLACK);
+		final ActionBar actionBar = getSupportActionBar();
+		actionBar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_TITLE);
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		
-		mButton = (Button) findViewById(R.id.button);
-		mButton.setOnClickListener(new OnClickListener() {
-			
+		
+		SimplePageAdapter simplePageAdapter= new SimplePageAdapter(getSupportFragmentManager());
+		
+		mViewPager = (ViewPager) findViewById(R.id.pager);
+		mViewPager.setAdapter(simplePageAdapter);
+		mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+
 			@Override
-			public void onClick(View v) {
-				startActivity(new Intent(MainActivity.this, ScreenSlideActivity.class));
+			public void onPageSelected(int position) {
+				actionBar.setSelectedNavigationItem(position);
+				super.onPageSelected(position);
 			}
+			
 		});
 		
-		mLinearLayout = (LinearLayout) findViewById(R.id.head_linerlayout);
-		addImageView();
-		
-		 
+		actionBar.addTab(actionBar.newTab().setText(getString(R.string.shouye)).setTabListener(this), 0, true);
+		actionBar.addTab(actionBar.newTab().setText(getString(R.string.zhanyi)).setTabListener(this), 1);
 	}
 	
-	private void addImageView() {
-	    DisplayMetrics metrics = new DisplayMetrics();
-	    getWindowManager().getDefaultDisplay().getMetrics(metrics);
-	    int width = metrics.widthPixels;
-		
-		for (int i = 0; i < 10; i++) {
-			ImageView imageView = new ImageView(this);
-			LayoutParams lp = new LayoutParams(width/3, LayoutParams.MATCH_PARENT);
-			imageView.setLayoutParams(lp);
-			imageView.setImageResource(R.drawable.sky);
-			imageView.setScaleType(ScaleType.FIT_XY);
-			imageView.setBackgroundResource(R.drawable.tran_frame);
-			
-			mLinearLayout.addView(imageView);
+	private class SimplePageAdapter extends FragmentStatePagerAdapter {
+
+		public SimplePageAdapter(FragmentManager fm) {
+			super(fm);
 		}
+
+		@Override
+		public Fragment getItem(int arg0) {
+			switch (arg0) {
+			case 0:
+				return new HomeFragment();
+			case 1:
+				return new WarListFragment();
+			default:
+				break;
+			}
+			return null;
+		}
+
+		@Override
+		public int getCount() {
+			return 2;
+		}
+		
 	}
+
+	@Override
+	public void onTabSelected(Tab tab, FragmentTransaction ft) {
+		mViewPager.setCurrentItem(tab.getPosition());
+	}
+
+	@Override
+	public void onTabUnselected(Tab tab, FragmentTransaction ft) {}
+
+	@Override
+	public void onTabReselected(Tab tab, FragmentTransaction ft) {}
 	
 
 }

@@ -28,18 +28,4 @@
  	    <item>Kenshin vs Rainbow</item>
  	    <item>4K.Fov vs Moon</item>
    	</string-array>
-   	<string-array name="game_title_pre">  
- 	    <!-- 1 -->
- 	    <item>十大经典战役之一</item>
- 	    <item>十大经典战役之二</item>
- 	    <item>十大经典战役之三</item>
- 	    <item>十大经典战役之四</item>
- 	    <item>十大经典战役之五</item> 	    
- 	    <!-- 6 -->
- 	    <item>十大经典战役之六</item>
- 	    <item>十大经典战役之七</item>
- 	    <item>十大经典战役之八</item>
- 	    <item>十大经典战役之九</item>
- 	    <item>十大经典战役之十</item>
-   	</string-array>
 </resources>
