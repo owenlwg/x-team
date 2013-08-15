@@ -10,7 +10,8 @@
         android:layout_height="wrap_content" 
         android:cacheColorHint="@android:color/transparent"
         android:dividerHeight="1dp"
-        android:divider="@color/dark_gray">
+        android:divider="@color/dark_gray"
+        android:smoothScrollbar="true">
     </ListView>
 
 </FrameLayout>

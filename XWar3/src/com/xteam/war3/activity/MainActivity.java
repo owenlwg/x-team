@@ -38,28 +38,32 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
 			@Override
 			public void onPageSelected(int position) {
 				actionBar.setSelectedNavigationItem(position);
-				super.onPageSelected(position);
 			}
 			
 		});
 		
-		actionBar.addTab(actionBar.newTab().setText(getString(R.string.shouye)).setTabListener(this), 0, true);
-		actionBar.addTab(actionBar.newTab().setText(getString(R.string.zhanyi)).setTabListener(this), 1);
+		actionBar.addTab(actionBar.newTab().setText(getString(R.string.shouye)).setTabListener(this));
+		actionBar.addTab(actionBar.newTab().setText(getString(R.string.zhanyi)).setTabListener(this));
 	}
 	
 	private class SimplePageAdapter extends FragmentStatePagerAdapter {
 
+		private HomeFragment homeFragment;
+		private WarListFragment warListFragment;
+		
 		public SimplePageAdapter(FragmentManager fm) {
 			super(fm);
+			homeFragment = new HomeFragment();
+			warListFragment = new WarListFragment();
 		}
 
 		@Override
 		public Fragment getItem(int arg0) {
 			switch (arg0) {
 			case 0:
-				return new HomeFragment();
+				return homeFragment;
 			case 1:
-				return new WarListFragment();
+				return warListFragment;
 			default:
 				break;
 			}
