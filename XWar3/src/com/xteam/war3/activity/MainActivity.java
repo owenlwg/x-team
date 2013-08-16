@@ -2,6 +2,7 @@ package com.xteam.war3.activity;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
+import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 import android.content.Context;
@@ -14,20 +15,17 @@ import android.support.v4.view.ViewPager;
 
 public class MainActivity extends SherlockFragmentActivity implements ActionBar.TabListener{
 
-	private Context mContext;
 	private ViewPager mViewPager;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mContext = this;
 		
 		setContentView(R.layout.main);
 		
 		final ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_TITLE);
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		
 		
 		SimplePageAdapter simplePageAdapter= new SimplePageAdapter(getSupportFragmentManager());
 		
@@ -47,23 +45,17 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
 	}
 	
 	private class SimplePageAdapter extends FragmentStatePagerAdapter {
-
-		private HomeFragment homeFragment;
-		private WarListFragment warListFragment;
-		
 		public SimplePageAdapter(FragmentManager fm) {
 			super(fm);
-			homeFragment = new HomeFragment();
-			warListFragment = new WarListFragment();
 		}
 
 		@Override
 		public Fragment getItem(int arg0) {
 			switch (arg0) {
 			case 0:
-				return homeFragment;
+				return new HomeFragment();
 			case 1:
-				return warListFragment;
+				return new WarListFragment();
 			default:
 				break;
 			}
@@ -74,7 +66,6 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
 		public int getCount() {
 			return 2;
 		}
-		
 	}
 
 	@Override
@@ -88,5 +79,4 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
 	@Override
 	public void onTabReselected(Tab tab, FragmentTransaction ft) {}
 	
-
 }

@@ -18,6 +18,7 @@ package com.xteam.war3.activity;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.xteam.war3.utils.TextUtils;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,6 +29,8 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.SpannableStringBuilder;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,32 +45,55 @@ public class WarSlideActivity extends SherlockFragmentActivity {
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;
     private int initPosition = 0;
+    private SpannableStringBuilder textSpan;
+    private SpannableStringBuilder titleSpan;
+    private TextUtils mTextUtils;
+    private String[] mTitles;
+    private String[] mDescriptions;
+    private XApplication xApplication;
+    private TextView mTvNumber;
+    private ScrollingMovementMethod scrollingMovementMethod;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        xApplication = (XApplication) getApplication();
+        
         setContentView(R.layout.war_slide);
 
         initPosition = getIntent().getIntExtra("initPosition", 0);
         
-        final ActionBar actionBar = getSupportActionBar();
+        mTextUtils = new TextUtils(this);
+        textSpan = new SpannableStringBuilder();
+        titleSpan = new SpannableStringBuilder();
+        scrollingMovementMethod = new ScrollingMovementMethod();
         
+        mTitles = getResources().getStringArray(R.array.game_title);
+        mDescriptions = getResources().getStringArray(R.array.game_text);
+        
+        final ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
         
         mPager = (ViewPager) findViewById(R.id.pager);
+        mTvNumber = (TextView) findViewById(R.id.number);
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
+        mPager.setOffscreenPageLimit(4);
         mPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
+            	mTvNumber.setText((position + 1) + "/10");
                 invalidateOptionsMenu();
             }
         });
         mPager.setCurrentItem(initPosition);
+        mTvNumber.setText((initPosition + 1) + "/10");
     }
 
     @Override
 	public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
-//    	getMenuInflater().inflate(R.menu.activity_screen_slide, menu);
+    	getSupportMenuInflater().inflate(R.menu.menu_screen_slide, menu);
 		return true;
 	}
 
@@ -80,7 +106,11 @@ public class WarSlideActivity extends SherlockFragmentActivity {
     		// See http://developer.android.com/design/patterns/navigation.html for more.
     		NavUtils.navigateUpTo(this, new Intent(this, MainActivity.class));
     		return true;
-
+    	case R.id.menu_share:
+    		
+    		return true;
+    	
+    		
     	}
 		return super.onOptionsItemSelected(item);
 	}
@@ -105,15 +135,11 @@ public class WarSlideActivity extends SherlockFragmentActivity {
             fragment.setArguments(args);
             return fragment;
 		}
+		
     }
     
     public class ScreenSlidePageFragment extends Fragment {
-        public static final String ARG_PAGE = "page";
-
         private int mPageNumber;
-        private String[] mTitles;
-        private String[] mDescriptions;
-        private String[] mTitlePres;
         private TextView mTvTitle;
         private TextView mTvDescription;
 
@@ -123,8 +149,6 @@ public class WarSlideActivity extends SherlockFragmentActivity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             mPageNumber = getArguments().getInt(ARG_PAGE);
-            mTitles = getResources().getStringArray(R.array.game_title);
-            mDescriptions = getResources().getStringArray(R.array.game_text);
         }
 
         @Override
@@ -135,11 +159,16 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 
             mTvTitle = ((TextView) rootView.findViewById(android.R.id.text1));
             mTvDescription = ((TextView) rootView.findViewById(R.id.description));
+            mTvDescription.setMovementMethod(scrollingMovementMethod);
             
             int resId = getResources().getIdentifier("a" + (mPageNumber + 1), "drawable", getActivity().getPackageName());
             ((ImageView) rootView.findViewById(R.id.imageview)).setImageResource(resId);
-            mTvTitle.setText(mTitles[mPageNumber]);
-            mTvDescription.setText("        " + mDescriptions[mPageNumber]);
+            mTvTitle.setTypeface(xApplication.getBoldTypeface());
+            mTextUtils.setTitleStyle(titleSpan, mTitles[mPageNumber]);
+            mTvTitle.setText(titleSpan);
+            mTvDescription.setTypeface(xApplication.getNormalTypeface());
+            mTextUtils.setTextStyle(textSpan, 7, 8, mDescriptions[mPageNumber]);
+            mTvDescription.setText(textSpan);
             
             return rootView;
         }

@@ -1,25 +1,46 @@
 package com.xteam.war3.utils;
 
+import com.xteam.war3.activity.R;
+
 import android.content.Context;
-import android.graphics.Typeface;
+import android.graphics.Color;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 
 public class TextUtils {
 	
 	private Context mContext;
+	private ForegroundColorSpan textForegroundColorSpan;
+	private ForegroundColorSpan titleForegroundColorSpan;
+	private RelativeSizeSpan relativeSizeSpan;
+	private StyleSpan styleSpan;
 	
 	public TextUtils(Context context) {
 		mContext = context;
+		textForegroundColorSpan = new ForegroundColorSpan(mContext.getResources().getColor(R.color.dark_red));
+		relativeSizeSpan = new RelativeSizeSpan(1.2f);
+		styleSpan = new StyleSpan(android.graphics.Typeface.BOLD);
+		titleForegroundColorSpan = new ForegroundColorSpan(mContext.getResources().getColor(R.color.dark_red));
 	}
 	
-	public Typeface getBoldTypeface() {
-		Typeface typeface = Typeface.createFromAsset(mContext.getAssets(), "Roboto-Bold.ttf");
-		return typeface;
+	public void setTextStyle(SpannableStringBuilder span, int start, int end, String content) {
+		span.clear();
+		span.append(content);
+		span.setSpan(textForegroundColorSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+		span.setSpan(relativeSizeSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+		span.setSpan(styleSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 	}
-
-	public Typeface getNormalTypeface() {
-		Typeface typeface = Typeface.createFromAsset(mContext.getAssets(), "FT-Regular.ttf");
-		return typeface;
+	
+	public void setTitleStyle(SpannableStringBuilder span, String content) {
+		span.clear();
+		span.append(content);
+		int start = content.indexOf("vs");
+		span.setSpan(titleForegroundColorSpan, start, start + 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 	}
+	
 	public static String ToDBC(String input) {
 		   char[] c = input.toCharArray();
 		   for (int i = 0; i< c.length; i++) {

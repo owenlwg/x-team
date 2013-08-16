@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,24 +24,26 @@ public class WarListFragment extends SherlockFragment {
     private String[] mTitles;
     private String[] mDescriptions;
     private ListView mListView;
+    private SimpleAdapter simpleAdapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		
 		mContext = getActivity();
         mTitles = getResources().getStringArray(R.array.game_title);
         mDescriptions = getResources().getStringArray(R.array.game_text);
         
-		super.onCreate(savedInstanceState);
+        simpleAdapter = new SimpleAdapter();
+        
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		
 		View rootView = inflater.inflate(R.layout.war_list, container, false);
 		
 		mListView = (ListView) rootView.findViewById(R.id.listView);
-		mListView.setAdapter(new SimpleAdapter());
+		mListView.setAdapter(simpleAdapter);
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -87,7 +90,7 @@ public class WarListFragment extends SherlockFragment {
 
 		@Override
 		public Object getItem(int position) {
-			return mTitles[position];
+			return null;
 		}
 
 		@Override
@@ -95,11 +98,12 @@ public class WarListFragment extends SherlockFragment {
 			return position;
 		}
 		
-		public class ViewHolder {
-			ImageView imageView;
-			TextView title;
-			TextView description;
-		}
+	}
+	
+	static class ViewHolder {
+		ImageView imageView;
+		TextView title;
+		TextView description;
 	}
 	
 	

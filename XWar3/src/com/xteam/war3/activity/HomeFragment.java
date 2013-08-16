@@ -3,6 +3,7 @@ package com.xteam.war3.activity;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,18 +22,13 @@ public class HomeFragment extends SherlockFragment {
 	private TextView mTvTitle;
 	private TextView mTvDes;
 	private int width;
-	private Typeface boldTF;
-	private Typeface normalTF;
-	private TextUtils mTextUtils;
+	private XApplication xApplication;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		
-		mTextUtils = new TextUtils(getActivity());
-		boldTF = mTextUtils.getBoldTypeface();
-		normalTF = mTextUtils.getNormalTypeface();
-		
 		super.onCreate(savedInstanceState);
+		
+		xApplication = (XApplication) getActivity().getApplication();
 	}
 
 	@Override
@@ -43,9 +39,10 @@ public class HomeFragment extends SherlockFragment {
 		
 		mTvTitle = (TextView) rootView.findViewById(R.id.title);
 		mTvDes = (TextView) rootView.findViewById(R.id.description);
+		mTvDes.setMovementMethod(new ScrollingMovementMethod());
 		
-		mTvTitle.setTypeface(boldTF);
-		mTvDes.setTypeface(normalTF);
+		mTvTitle.setTypeface(xApplication.getBoldTypeface());
+		mTvDes.setTypeface(xApplication.getNormalTypeface());
 //		mTvTitle.setShadowLayer(3F, -1F, 1F, Color.BLACK);
 		
 		addImageView(getActivity(), rootView);
