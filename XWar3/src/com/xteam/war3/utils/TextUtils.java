@@ -20,7 +20,7 @@ public class TextUtils {
 	
 	public TextUtils(Context context) {
 		mContext = context;
-		textForegroundColorSpan = new ForegroundColorSpan(mContext.getResources().getColor(R.color.dark_red));
+		textForegroundColorSpan = new ForegroundColorSpan(mContext.getResources().getColor(R.color.dark_blue));
 		relativeSizeSpan = new RelativeSizeSpan(1.2f);
 		styleSpan = new StyleSpan(android.graphics.Typeface.BOLD);
 		titleForegroundColorSpan = new ForegroundColorSpan(mContext.getResources().getColor(R.color.dark_red));
