@@ -16,13 +16,13 @@ public class TextUtils {
 	private ForegroundColorSpan textForegroundColorSpan;
 	private ForegroundColorSpan titleForegroundColorSpan;
 	private RelativeSizeSpan relativeSizeSpan;
-	private StyleSpan styleSpan;
+//	private StyleSpan styleSpan;
 	
 	public TextUtils(Context context) {
 		mContext = context;
 		textForegroundColorSpan = new ForegroundColorSpan(mContext.getResources().getColor(R.color.dark_blue));
 		relativeSizeSpan = new RelativeSizeSpan(1.2f);
-		styleSpan = new StyleSpan(android.graphics.Typeface.BOLD);
+//		styleSpan = new StyleSpan(android.graphics.Typeface.BOLD);
 		titleForegroundColorSpan = new ForegroundColorSpan(mContext.getResources().getColor(R.color.dark_red));
 	}
 	
@@ -31,7 +31,7 @@ public class TextUtils {
 		span.append(content);
 		span.setSpan(textForegroundColorSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 		span.setSpan(relativeSizeSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-		span.setSpan(styleSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//		span.setSpan(styleSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 	}
 	
 	public void setTitleStyle(SpannableStringBuilder span, String content) {
