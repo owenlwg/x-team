@@ -41,6 +41,11 @@ public class TextUtils {
 		span.setSpan(titleForegroundColorSpan, start, start + 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 	}
 	
+	public String getGameUrl(int index) {
+		String[] gameUrls = mContext.getResources().getStringArray(R.array.game_url);
+		return gameUrls[index];
+	}
+	
 	public static String ToDBC(String input) {
 		   char[] c = input.toCharArray();
 		   for (int i = 0; i< c.length; i++) {
@@ -66,4 +71,6 @@ public class TextUtils {
         }
         return new String(source);
     }
+    
+    
 }

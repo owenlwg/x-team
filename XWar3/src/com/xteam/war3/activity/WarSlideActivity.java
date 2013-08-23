@@ -19,6 +19,7 @@ package com.xteam.war3.activity;
 import java.util.List;
 
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.xteam.war3.utils.TextUtils;
 
@@ -28,7 +29,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.NavUtils;
@@ -37,8 +37,6 @@ import android.support.v4.view.ViewPager;
 import android.text.SpannableStringBuilder;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -140,12 +138,13 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 			Bundle args = new Bundle();
 			args.putInt(ARG_PAGE, position);
 			fragment.setArguments(args);
+			fragment.setRetainInstance(true);
 			return fragment;
 		}
 
 	}
 
-	public class ScreenSlidePageFragment extends Fragment {
+	public class ScreenSlidePageFragment extends SherlockFragment {
 		private int mPageNumber;
 		private TextView mTvTitle;
 		private TextView mTvDescription;
@@ -183,7 +182,19 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 
 				@Override
 				public void onClick(View v) {
-
+					new Thread(){
+						@Override
+						public void run() {
+							if (isFlashEnable()) {
+								Intent intent = new Intent(getActivity(), PlayVideoActivity.class);
+								intent.putExtra("index", mPageNumber);
+								startActivity(intent);
+							} else {
+								goToBrowser(mPageNumber);
+							}
+						}
+						
+					}.start();
 				}
 			});
 
@@ -207,9 +218,9 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 		return false;
 	}
 	
-	private void goToBrowser() {
-		Intent installIntent = new Intent(  "android.intent.action.VIEW");  
-        installIntent.setData(Uri.parse("market://details?id=com.adobe.flashplayer"));  
-        startActivity(installIntent); 
+	private void goToBrowser(int index) {
+		Intent intent = new Intent("android.intent.action.VIEW");  
+		intent.setData(Uri.parse("http://share.vrs.sohu.com/1289528/v.swf&topBar=1&autoplay=false&plid=&pub_catecode=&from=page"));  
+        startActivity(intent); 
 	}
 }

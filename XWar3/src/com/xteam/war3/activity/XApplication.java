@@ -13,8 +13,11 @@ public class XApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		
+		Thread.setDefaultUncaughtExceptionHandler(handler)
+		
 		boldTypeface = Typeface.createFromAsset(getAssets(), "Roboto-Bold.ttf");
 		normalTypeface = Typeface.createFromAsset(getAssets(), "FT-Regular.ttf");
+		
 		
 	}
 
