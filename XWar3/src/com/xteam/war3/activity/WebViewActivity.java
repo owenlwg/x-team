@@ -1,37 +1,47 @@
 package com.xteam.war3.activity;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
 
+import org.json.JSONException;
+
 import com.xteam.war3.utils.TextUtils;
+import com.xteam.war3.utils.YoukuUrlUtils;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.Display;
+import android.util.Log;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.WebSettings.PluginState;
 
-public class PlayVideoActivity extends Activity {
+public class WebViewActivity extends Activity {
 	private WebView mWebView;
 	private String gameUrl;
 	private int index;
 	private Context mContext;
+	private TextUtils textUtils;
+	private MediaPlayer mediaPlayer;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mContext = this;
-		
-		setContentView(R.layout.play_video);
+		setContentView(R.layout.play_video_webview);
 		mWebView = (WebView) findViewById(R.id.webView);
+		
+		textUtils = new TextUtils(mContext);
 		Intent intent = getIntent();
 		if (intent != null) {
 			index = intent.getIntExtra("index", 0);
 		}
+
 	}
     
     @Override
@@ -62,8 +72,6 @@ public class PlayVideoActivity extends Activity {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			TextUtils textUtils = new TextUtils(mContext);
-//			gameUrl = textUtils.getGameUrl(index);
 			return null;
 		}
 
@@ -79,8 +87,6 @@ public class PlayVideoActivity extends Activity {
 		int wi = (int) (mWebView.getWidth());
 		int hi = (int) (mWebView.getHeight());
 		String widthAndHeight = "width='" + wi + "' height='" + hi + "'";
-//		String videoURL = linkYouTube.replace("watch?v=", "v/")
-//				+ "?fs=0&amp;hl=nl_NL&autoplay=1&rel=0&showinfo=0&autohide=1";
 		
 //		videoURL = "http://player.youku.com/player.php/sid/XNTM5MjU3NDI0/v.swf";
 		String videoURL = "http://player.youku.com/embed/XNzE0NzEyNA==";

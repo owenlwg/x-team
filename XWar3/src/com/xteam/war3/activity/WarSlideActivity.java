@@ -16,16 +16,20 @@
 
 package com.xteam.war3.activity;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.xteam.war3.utils.TextUtils;
+import com.xteam.war3.utils.YoukuUrlUtils;
 
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -43,6 +47,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.MediaController.MediaPlayerControl;
 
 public class WarSlideActivity extends SherlockFragmentActivity {
 	private static final int NUM_PAGES = 10;
@@ -120,7 +125,7 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
-
+	
 	private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
 
 		public ScreenSlidePagerAdapter(FragmentManager fm) {
@@ -185,13 +190,13 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 					new Thread(){
 						@Override
 						public void run() {
-							if (isFlashEnable()) {
-								Intent intent = new Intent(getActivity(), PlayVideoActivity.class);
-								intent.putExtra("index", mPageNumber);
-								startActivity(intent);
-							} else {
+//							if (isFlashEnable()) {
+//								Intent intent = new Intent(getActivity(), MediaPlayActivity.class);
+//								intent.putExtra("index", mPageNumber);
+//								startActivity(intent);
+//							} else {
 								goToBrowser(mPageNumber);
-							}
+//							}
 						}
 						
 					}.start();
@@ -206,7 +211,7 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 		}
 
 	}
-
+	
 	private boolean isFlashEnable() {
 		PackageManager pm = getPackageManager();
 		List<PackageInfo> infoList = pm.getInstalledPackages(PackageManager.GET_SERVICES);
@@ -220,7 +225,8 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 	
 	private void goToBrowser(int index) {
 		Intent intent = new Intent("android.intent.action.VIEW");  
-		intent.setData(Uri.parse("http://share.vrs.sohu.com/1289528/v.swf&topBar=1&autoplay=false&plid=&pub_catecode=&from=page"));  
+		intent.setData(Uri.parse("http://www.56.com/u35/v_OTU0NzM2ODg.html"));  
         startActivity(intent); 
 	}
+
 }

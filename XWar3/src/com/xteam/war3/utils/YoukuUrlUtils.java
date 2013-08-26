@@ -9,58 +9,65 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 public class YoukuUrlUtils {
 	
-	public void getYoukuRealUrl(String url) throws JSONException {
+	public static String getYoukuRealUrl(String url) throws JSONException {
 		// 目前只支持 地址 带有 v_show 的网页
-		String htmlUrl = "http://v.youku.com/v_show/id_XMzgwMzQzNzM2.html";// 视频页面地址
+		String htmlUrl = "http://v.youku.com/v_show/id_XNTU0MTE1NTg4.html";// 视频页面地址
 		// 截取 id f17333950o1p0
 		String htmlUrlId = htmlUrl.substring(htmlUrl.lastIndexOf("/") + 4, htmlUrl.length() - 5);
 		// 取得返回的 json数据
 		String json = getInputHtml("http://v.youku.com/player/getPlayList/VideoIDS/" + htmlUrlId);
 
-		JSONObject jsobj = new JSONObject(json);
-		JSONArray jsonarr = jsobj.getJSONArray("data");
-		JSONObject obj1 = jsonarr.getJSONObject(0);
-		double seed = obj1.getDouble("seed");
-		JSONObject obj2 = obj1.getJSONObject("streamfileids");
-		String mp4id = null;
-		String flvid = null;
-		String format = null;
-		try {
-			mp4id = obj2.getString("mp4");
-			format = "mp4";
-		} catch (JSONException e) {
-			System.out.println("没有MP4格式");
+		if (json != null) {
+			JSONObject jsobj = new JSONObject(json);
+			JSONArray jsonarr = jsobj.getJSONArray("data");
+			JSONObject obj1 = jsonarr.getJSONObject(0);
+			double seed = obj1.getDouble("seed");
+			JSONObject obj2 = obj1.getJSONObject("streamfileids");
+			String mp4id = null;
+			String flvid = null;
+			String format = null;
 			try {
-				flvid = obj2.getString("flv");
-				format = "flv";
-			} catch (JSONException e1) {
-				System.out.println("没有FLV格式");
-				return;
+				mp4id = obj2.getString("mp4");
+				format = "mp4";
+			} catch (JSONException e) {
+				Log.e("owen", "没有MP4格式");
+				try {
+					flvid = obj2.getString("flv");
+					format = "flv";
+				} catch (JSONException e1) {
+					Log.e("owen", "没有FLV格式");
+					return null;
+				}
+				return null;
 			}
+			//
+			String realfileid = null;
+			if (format.equals("mp4")) {
+				realfileid = getFileID(mp4id, seed);
+			} else {
+				realfileid = getFileID(flvid, seed);
+			}
+			String idLeft = realfileid.substring(0, 8);
+			String idRight = realfileid.substring(10);
+			//
+			String sid = genSid();
+			JSONObject obj3 = obj1.getJSONObject("segs");
+			JSONArray mp4arr = obj3.getJSONArray(format);
+			String result = null;
+			for (int i = 0; i < mp4arr.length(); i++) {
+				JSONObject o = mp4arr.getJSONObject(i);
+				String k = o.getString("k");
+				result = "http://f.youku.com/player/getFlvPath/sid/" + sid + "_" + String.format("%1$02X", i) + "/st/"
+						+ format + "/fileid/" + idLeft + String.format("%1$02X", i) + idRight + "?K=" + k;
+				Log.e("owen", "URL: " + result);
+			}
+			return result;
 		}
-		//
-		String realfileid = null;
-		if (format.equals("mp4")) {
-			realfileid = getFileID(mp4id, seed);
-		} else {
-			realfileid = getFileID(flvid, seed);
-		}
-		String idLeft = realfileid.substring(0, 8);
-		String idRight = realfileid.substring(10);
-		//
-		String sid = genSid();
-		JSONObject obj3 = obj1.getJSONObject("segs");
-		JSONArray mp4arr = obj3.getJSONArray(format);
-		for (int i = 0; i < mp4arr.length(); i++) {
-			JSONObject o = mp4arr.getJSONObject(i);
-			String k = o.getString("k");
-			String result = "http://f.youku.com/player/getFlvPath/sid/" + sid + "_" + String.format("%1$02X", i) + "/st/"
-					+ format + "/fileid/" + idLeft + String.format("%1$02X", i) + idRight + "?K=" + k;
-			System.out.println(url);
-		}
-
+		return null;
 	}
 
 	private static String getFileID(String fileid, double seed) {
@@ -101,8 +108,8 @@ public class YoukuUrlUtils {
 			url = new URL(urlStr);
 			HttpURLConnection httpsURLConnection = (HttpURLConnection) url.openConnection();
 			httpsURLConnection.setRequestMethod("GET");
-			httpsURLConnection.setConnectTimeout(5 * 1000);
-			if (httpsURLConnection.getResponseCode() == 200) {
+			httpsURLConnection.setConnectTimeout(30 * 1000);
+			if (httpsURLConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 				// 通过输入流获取网络图片
 				InputStream inputStream = httpsURLConnection.getInputStream();
 				byte[] data = readInputStream(inputStream);
@@ -111,8 +118,6 @@ public class YoukuUrlUtils {
 			}
 
 		} catch (Exception e) {
-
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
