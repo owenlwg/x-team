@@ -191,11 +191,11 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 						@Override
 						public void run() {
 //							if (isFlashEnable()) {
-//								Intent intent = new Intent(getActivity(), MediaPlayActivity.class);
-//								intent.putExtra("index", mPageNumber);
-//								startActivity(intent);
+								Intent intent = new Intent(getActivity(), MediaPlayActivity.class);
+								intent.putExtra("index", mPageNumber);
+								startActivity(intent);
 //							} else {
-								goToBrowser(mPageNumber);
+//								goToBrowser(mPageNumber);
 //							}
 						}
 						

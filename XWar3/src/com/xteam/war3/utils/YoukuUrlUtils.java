@@ -110,13 +110,11 @@ public class YoukuUrlUtils {
 			httpsURLConnection.setRequestMethod("GET");
 			httpsURLConnection.setConnectTimeout(30 * 1000);
 			if (httpsURLConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-				// 通过输入流获取网络图片
 				InputStream inputStream = httpsURLConnection.getInputStream();
 				byte[] data = readInputStream(inputStream);
 				inputStream.close();
 				return new String(data, "UTF-8");
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -125,19 +123,13 @@ public class YoukuUrlUtils {
 	}
 
 	public static byte[] readInputStream(InputStream inputStream) throws Exception {
-		// 定义一个输出流向内存输出数据
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-		// 定义一个缓冲区
 		byte[] buffer = new byte[1024];
-		// 读取数据长度
 		int len = 0;
-		// 当取得完数据后会返回一个-1
 		while ((len = inputStream.read(buffer)) != -1) {
-			// 把缓冲区的数据 写到输出流里面
 			byteArrayOutputStream.write(buffer, 0, len);
 		}
 		byteArrayOutputStream.close();
-		// 得到数据后返回
 		return byteArrayOutputStream.toByteArray();
 	}
 

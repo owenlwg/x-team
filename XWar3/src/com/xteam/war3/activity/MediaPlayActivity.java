@@ -13,17 +13,24 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.AudioManager;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
+import android.view.View;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
+import android.view.View.OnTouchListener;
+import android.view.ViewGroup.LayoutParams;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.WebSettings.PluginState;
@@ -40,6 +47,7 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 	private SurfaceHolder surfaceHolder;
 	private ProgressDialog mProgressDialog;
 	private VideoView videoView;
+	private View view;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +65,21 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 //		surfaceHolder = surfaceView.getHolder();
 //		surfaceHolder.addCallback(this);
 //		surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+		view = findViewById(R.id.ll);
 		videoView = (VideoView) findViewById(R.id.videoView);
-		
+		videoView.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (view.getVisibility() == View.VISIBLE) {
+					view.setVisibility(View.GONE);
+				} else {
+					view.setVisibility(View.VISIBLE);
+				}
+				
+				return false;
+			}
+		});
 	}
     
     @Override
@@ -76,7 +97,45 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 		}
 	}
     
-    
+
+	
+	private void playVideo2(String url) {
+		Log.e("owen", "playVideo url: " + url);
+		videoView.setVideoURI(Uri.parse(url + ".mp4")); 
+		videoView.setOnPreparedListener(this);
+		videoView.setMediaController(new MediaController(this));
+	}
+	
+    class PlayVideoAsyn extends AsyncTask<Void, String, String> {
+    	
+		@Override
+		protected void onPreExecute() {
+			mProgressDialog = ProgressDialog.show(mContext, "", "Please wait...");
+		}
+
+		@Override
+		protected String doInBackground(Void... params) {
+			String url = "";
+			try {
+				url = YoukuUrlUtils.getYoukuRealUrl(textUtils.getGameUrl(index));
+			} catch (JSONException e) {
+				e.printStackTrace();
+				return null;
+			}
+			return url;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+			if (result != null) {
+				playVideo2(result);
+			}
+		}
+		
+    }
+	
+	
 	private void playVideo(String url) {
 		Log.e("owen", "playVideo url: " + url);
 		
@@ -100,15 +159,6 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 		
 	}
 	
-	private void playVideo2(String url) {
-		Log.e("owen", "playVideo url: " + url);
-//		videoView.setVideoURI(Uri.parse(url + ".mp4")); 
-		videoView.setVideoURI(Uri.parse(url + ".mp4")); 
-		videoView.start();
-		videoView.setMediaController(new MediaController(this));
-		
-	}
-	
 	@Override
 	public void onPrepared(MediaPlayer mp) {
 		if (mProgressDialog != null && mProgressDialog.isShowing()) {
@@ -116,33 +166,6 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 		}
 		mp.start();
 	}
-
-	
-    class PlayVideoAsyn extends AsyncTask<Void, String, String> {
-
-		@Override
-		protected String doInBackground(Void... params) {
-			String url = "";
-			try {
-				url = YoukuUrlUtils.getYoukuRealUrl(textUtils.getGameUrl(index));
-				if (url != null) {
-//					videoView.setVideoURI(Uri.parse(url + ".mp4")); 
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-			return url;
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-			super.onPostExecute(result);
-			if (result != null) {
-				playVideo2(result);
-			}
-		}
-		
-    }
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
