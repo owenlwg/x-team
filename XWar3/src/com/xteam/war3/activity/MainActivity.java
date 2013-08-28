@@ -46,19 +46,6 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
 		actionBar.addTab(actionBar.newTab().setText(getString(R.string.shouye)).setTabListener(this));
 		actionBar.addTab(actionBar.newTab().setText(getString(R.string.zhanyi)).setTabListener(this));
 		
-		new Thread() {
-
-			@Override
-			public void run() {
-				try {
-					YoukuUrlUtils.getYoukuRealUrl("");
-				} catch (JSONException e) {
-					// FIXME OWEN Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			
-		}.start();
 	}
 	
 	private class SimplePageAdapter extends FragmentStatePagerAdapter {

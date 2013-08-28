@@ -16,20 +16,11 @@
 
 package com.xteam.war3.activity;
 
-import java.io.IOException;
 import java.util.List;
-
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.xteam.war3.utils.TextUtils;
-import com.xteam.war3.utils.YoukuUrlUtils;
 
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -47,7 +38,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.MediaController.MediaPlayerControl;
+
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.xteam.war3.application.XApplication;
+import com.xteam.war3.utils.TextUtils;
 
 public class WarSlideActivity extends SherlockFragmentActivity {
 	private static final int NUM_PAGES = 10;
@@ -70,7 +66,6 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 		xApplication = (XApplication) getApplication();
 
 		setContentView(R.layout.war_slide);
-
 		initPosition = getIntent().getIntExtra("initPosition", 0);
 
 		mTextUtils = new TextUtils(this);

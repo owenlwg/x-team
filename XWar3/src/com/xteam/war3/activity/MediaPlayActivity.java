@@ -3,6 +3,7 @@ package com.xteam.war3.activity;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.util.ArrayList;
 
 import org.json.JSONException;
 
@@ -21,23 +22,32 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.WebSettings.PluginState;
+import android.widget.LinearLayout;
 import android.widget.MediaController;
+import android.widget.TextView;
 import android.widget.VideoView;
 
 public class MediaPlayActivity extends Activity implements SurfaceHolder.Callback, MediaPlayer.OnPreparedListener {
+	
+	private static final int WHAT_DELAY = 10;
+	
 	private String gameUrl;
 	private int index;
 	private Context mContext;
@@ -47,7 +57,9 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 	private SurfaceHolder surfaceHolder;
 	private ProgressDialog mProgressDialog;
 	private VideoView videoView;
-	private View view;
+	private LinearLayout linearLayout;
+	private ArrayList<String> UrlList;
+	private Message message;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,22 +73,23 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 			index = intent.getIntExtra("index", 0);
 		}
 
+		message = mHandler.obtainMessage(WHAT_DELAY);
 //		surfaceView = (SurfaceView) findViewById(R.id.surfaceView);
 //		surfaceHolder = surfaceView.getHolder();
 //		surfaceHolder.addCallback(this);
 //		surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-		view = findViewById(R.id.ll);
+		linearLayout = (LinearLayout) findViewById(R.id.ll_top);
 		videoView = (VideoView) findViewById(R.id.videoView);
 		videoView.setOnTouchListener(new OnTouchListener() {
 			
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				if (view.getVisibility() == View.VISIBLE) {
-					view.setVisibility(View.GONE);
-				} else {
-					view.setVisibility(View.VISIBLE);
+				if (linearLayout.getVisibility() != View.VISIBLE) {
+					linearLayout.setVisibility(View.VISIBLE);
 				}
-				
+				mHandler.removeMessages(WHAT_DELAY);
+				message = mHandler.obtainMessage(WHAT_DELAY);
+				mHandler.sendMessageDelayed(message, 3000);
 				return false;
 			}
 		});
@@ -96,17 +109,67 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 			mediaPlayer = null;
 		}
 	}
-    
+	
+	private Handler mHandler = new Handler(){
 
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case WHAT_DELAY:
+				if (linearLayout.getVisibility() == View.VISIBLE) {
+					linearLayout.setVisibility(View.INVISIBLE);
+				}
+				break;
+			default:
+				break;
+			}
+		}
+		
+	};
+	
+	private void initButton() {
+		if (UrlList != null && UrlList.size() > 0) {
+			LayoutParams lp = new LayoutParams(46, 32);
+			for (int i = 0; i < UrlList.size(); i++) {
+				TextView tv = new TextView(this);
+				tv.setLayoutParams(lp);
+				tv.setGravity(Gravity.CENTER);
+				tv.setPadding(10, 0, 10, 0);
+				tv.setId(i);
+				tv.setTextColor(Color.WHITE);
+				tv.setBackgroundResource(R.drawable.round_image);
+				tv.setText("" + i);
+				tv.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						Log.e("owen", "onClick view id: " + v.getId());
+						playVideo2(UrlList.get(v.getId()));
+					}
+				});
+				
+				linearLayout.addView(tv);
+			}
+			
+			playVideo2(UrlList.get(0));
+		} else {
+			finish();
+		}
+	}
+	
 	
 	private void playVideo2(String url) {
 		Log.e("owen", "playVideo url: " + url);
-		videoView.setVideoURI(Uri.parse(url + ".mp4")); 
+		if (videoView.isPlaying()) {
+			mProgressDialog = ProgressDialog.show(mContext, "", "Please wait...");
+			videoView.stopPlayback();
+		}
+		videoView.setVideoURI(Uri.parse(url)); 
 		videoView.setOnPreparedListener(this);
 		videoView.setMediaController(new MediaController(this));
 	}
 	
-    class PlayVideoAsyn extends AsyncTask<Void, String, String> {
+    class PlayVideoAsyn extends AsyncTask<Void, Void, Void> {
     	
 		@Override
 		protected void onPreExecute() {
@@ -114,23 +177,19 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 		}
 
 		@Override
-		protected String doInBackground(Void... params) {
-			String url = "";
+		protected Void doInBackground(Void... params) {
 			try {
-				url = YoukuUrlUtils.getYoukuRealUrl(textUtils.getGameUrl(index));
+				UrlList = YoukuUrlUtils.getYoukuRealUrl(textUtils.getGameUrl(index));
 			} catch (JSONException e) {
 				e.printStackTrace();
-				return null;
 			}
-			return url;
+			return null;
 		}
 
 		@Override
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
-			if (result != null) {
-				playVideo2(result);
-			}
+			initButton();
 		}
 		
     }

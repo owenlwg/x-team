@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,9 +14,11 @@ import android.util.Log;
 
 public class YoukuUrlUtils {
 	
-	public static String getYoukuRealUrl(String url) throws JSONException {
+	public static ArrayList<String> getYoukuRealUrl(String url) throws JSONException {
+		ArrayList<String> urls = new ArrayList<String>();
 		// 目前只支持 地址 带有 v_show 的网页
-		String htmlUrl = "http://v.youku.com/v_show/id_XNTU0MTE1NTg4.html";// 视频页面地址
+//		String htmlUrl = "http://v.youku.com/v_show/id_XNTU0MTE1NTg4.html";// 视频页面地址
+		String htmlUrl = url;// 视频页面地址
 		// 截取 id f17333950o1p0
 		String htmlUrlId = htmlUrl.substring(htmlUrl.lastIndexOf("/") + 4, htmlUrl.length() - 5);
 		// 取得返回的 json数据
@@ -42,7 +45,6 @@ public class YoukuUrlUtils {
 					Log.e("owen", "没有FLV格式");
 					return null;
 				}
-				return null;
 			}
 			//
 			String realfileid = null;
@@ -64,10 +66,11 @@ public class YoukuUrlUtils {
 				result = "http://f.youku.com/player/getFlvPath/sid/" + sid + "_" + String.format("%1$02X", i) + "/st/"
 						+ format + "/fileid/" + idLeft + String.format("%1$02X", i) + idRight + "?K=" + k;
 				Log.e("owen", "URL: " + result);
+				urls.add(result);
 			}
-			return result;
+			return urls;
 		}
-		return null;
+		return urls;
 	}
 
 	private static String getFileID(String fileid, double seed) {

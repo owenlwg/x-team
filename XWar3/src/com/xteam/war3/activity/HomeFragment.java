@@ -15,6 +15,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import com.xteam.war3.application.XApplication;
 import com.xteam.war3.utils.TextUtils;
 
 public class HomeFragment extends SherlockFragment {

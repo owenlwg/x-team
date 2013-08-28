@@ -1,6 +1,5 @@
-package com.xteam.war3.activity;
+package com.xteam.war3.application;
 
-import com.xteam.war3.application.CrashHandler;
 
 import android.app.Application;
 import android.graphics.Typeface;

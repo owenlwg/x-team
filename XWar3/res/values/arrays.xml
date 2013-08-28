@@ -30,16 +30,16 @@
    	</string-array>
  	<string-array name="game_url">  
  	    <!-- 1 -->
- 	    <item>http://player.youku.com/player.php/Type/Folder/Fid/1288715/Ob/1/sid/XMTc1MDQxNzY=/v.swf</item>
- 	    <item>http://player.youku.com/player.php/Type/Folder/Fid/1288715/Ob/1/sid/XMTc1MDQ4MTI=/v.swf</item>
- 	    <item>http://player.youku.com/player.php/Type/Folder/Fid/1288715/Ob/1/sid/XMTc1MDU2ODA=/v.swf</item>
- 	    <item>http://player.youku.com/player.php/Type/Folder/Fid/1288715/Ob/1/sid/XMTc1MDY0OTI=/v.swf</item>
- 	    <item>http://player.youku.com/player.php/Type/Folder/Fid/1288715/Ob/1/sid/XMTc1MDczMzY=/v.swf</item> 	    
+ 	    <item>http://v.youku.com/v_show/id_XMTc1MDQxNzY=.html</item>
+ 	    <item>http://v.youku.com/v_show/id_XMTc1MDQ4MTI=.html</item>
+ 	    <item>http://v.youku.com/v_show/id_XMTc1MDU2ODA=.html</item>
+ 	    <item>http://v.youku.com/v_show/id_XMTc1MDY0OTI=.html</item>
+ 	    <item>http://v.youku.com/v_show/id_XMTc1MDczMzY=.html</item> 	    
  	    <!-- 6 -->
- 	    <item>http://player.youku.com/player.php/Type/Folder/Fid/1288715/Ob/1/sid/XMTc1MTk1MTY=/v.swf</item>
- 	    <item>http://player.youku.com/player.php/Type/Folder/Fid/1288715/Ob/1/sid/XMTc1MjM5MTY=/v.swf</item>
- 	    <item>http://player.youku.com/player.php/Type/Folder/Fid/1288715/Ob/1/sid/XMTc1Mjk2OTY=/v.swf</item>
- 	    <item>http://player.youku.com/player.php/Type/Folder/Fid/1288715/Ob/1/sid/XMTc1Mzc4MTY=/v.swf</item>
- 	    <item>http://player.youku.com/player.php/Type/Folder/Fid/1288715/Ob/1/sid/XMTc1NDU2NzI=/v.swf</item>
+ 	    <item>http://v.youku.com/v_show/id_XMTc1MTk1MTY=.html</item>
+ 	    <item>http://v.youku.com/v_show/id_XMTc1MjM5MTY=.html</item>
+ 	    <item>http://v.youku.com/v_show/id_XMTc1Mjk2OTY=.html</item>
+ 	    <item>http://v.youku.com/v_show/id_XMTc1Mzc4MTY=.html</item>
+ 	    <item>http://v.youku.com/v_show/id_XMTc1NDU2NzI=.html</item>
    	</string-array>
 </resources>
