@@ -23,6 +23,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -59,6 +60,7 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 	private XApplication xApplication;
 	private TextView mTvNumber;
 	private ScrollingMovementMethod scrollingMovementMethod;
+	private Handler mHandler = new Handler();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +86,7 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 		mTvNumber = (TextView) findViewById(R.id.number);
 		mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
 		mPager.setAdapter(mPagerAdapter);
-		mPager.setOffscreenPageLimit(4);
+		mPager.setOffscreenPageLimit(2);
 		mPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 			@Override
 			public void onPageSelected(int position) {
@@ -175,8 +177,12 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 			mTvTitle.setText(titleSpan);
 			mTvDescription.setTypeface(xApplication.getNormalTypeface());
 			mTextUtils.setTextStyle(textSpan, 7, 8, mDescriptions[mPageNumber]);
-			mTvDescription.setText(textSpan);
-
+			mHandler.postDelayed(new Runnable() {
+				public void run() {
+					mTvDescription.setText(textSpan);
+				}
+			}, 200);
+			
 			buttonPlay = (Button) rootView.findViewById(R.id.button_play);
 			buttonPlay.setOnClickListener(new OnClickListener() {
 

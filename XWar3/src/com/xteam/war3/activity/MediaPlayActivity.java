@@ -1,48 +1,38 @@
 package com.xteam.war3.activity;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
-import java.net.URL;
 import java.util.ArrayList;
 
 import org.json.JSONException;
-
-import com.xteam.war3.utils.TextUtils;
-import com.xteam.war3.utils.YoukuUrlUtils;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.AudioManager;
-import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
-import android.view.View;
-import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
+import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup.LayoutParams;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.webkit.WebSettings.PluginState;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
+
+import com.xteam.war3.utils.TextUtils;
+import com.xteam.war3.utils.YoukuUrlUtils;
 
 public class MediaPlayActivity extends Activity implements SurfaceHolder.Callback, MediaPlayer.OnPreparedListener {
 	
@@ -60,6 +50,9 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 	private LinearLayout linearLayout;
 	private ArrayList<String> UrlList;
 	private Message message;
+	private MediaController mediaController;
+	private TextView mCurrentTv;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +66,7 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 			index = intent.getIntExtra("index", 0);
 		}
 
+		mediaController = new MediaController(this);
 		message = mHandler.obtainMessage(WHAT_DELAY);
 //		surfaceView = (SurfaceView) findViewById(R.id.surfaceView);
 //		surfaceHolder = surfaceView.getHolder();
@@ -84,8 +78,10 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 			
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				if (linearLayout.getVisibility() != View.VISIBLE) {
+				if (!mediaController.isShowing()) {
 					linearLayout.setVisibility(View.VISIBLE);
+				} else {
+					linearLayout.setVisibility(View.GONE);
 				}
 				mHandler.removeMessages(WHAT_DELAY);
 				message = mHandler.obtainMessage(WHAT_DELAY);
@@ -129,24 +125,34 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 	
 	private void initButton() {
 		if (UrlList != null && UrlList.size() > 0) {
-			LayoutParams lp = new LayoutParams(46, 32);
+			LayoutParams lp = new LayoutParams(48, 38);
+			lp.setMargins(20, 0, 0, 0);
 			for (int i = 0; i < UrlList.size(); i++) {
 				TextView tv = new TextView(this);
 				tv.setLayoutParams(lp);
 				tv.setGravity(Gravity.CENTER);
-				tv.setPadding(10, 0, 10, 0);
 				tv.setId(i);
 				tv.setTextColor(Color.WHITE);
-				tv.setBackgroundResource(R.drawable.round_image);
+				tv.setBackgroundResource(R.drawable.round_icon_selector);
 				tv.setText("" + i);
 				tv.setOnClickListener(new OnClickListener() {
 					
 					@Override
-					public void onClick(View v) {
-						Log.e("owen", "onClick view id: " + v.getId());
-						playVideo2(UrlList.get(v.getId()));
+					public void onClick(View view) {
+						if (mCurrentTv.getId() == view.getId()) {
+							return;
+						}
+						mCurrentTv.setBackgroundResource(R.drawable.round_icon_normal);
+						mCurrentTv = (TextView) view;
+						view.setBackgroundResource(R.drawable.round_icon_select);
+						playVideo2(UrlList.get(view.getId()));
 					}
 				});
+				
+				if (i == 0) {
+					mCurrentTv = tv;
+					mCurrentTv.setBackgroundResource(R.drawable.round_icon_select);
+				}
 				
 				linearLayout.addView(tv);
 			}
@@ -161,19 +167,19 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 	private void playVideo2(String url) {
 		Log.e("owen", "playVideo url: " + url);
 		if (videoView.isPlaying()) {
-			mProgressDialog = ProgressDialog.show(mContext, "", "Please wait...");
+			mProgressDialog = ProgressDialog.show(mContext, "", getString(R.string.please_wait));
 			videoView.stopPlayback();
 		}
 		videoView.setVideoURI(Uri.parse(url)); 
 		videoView.setOnPreparedListener(this);
-		videoView.setMediaController(new MediaController(this));
+		videoView.setMediaController(mediaController);
 	}
 	
     class PlayVideoAsyn extends AsyncTask<Void, Void, Void> {
     	
 		@Override
 		protected void onPreExecute() {
-			mProgressDialog = ProgressDialog.show(mContext, "", "Please wait...");
+			mProgressDialog = ProgressDialog.show(mContext, "", getString(R.string.please_wait));
 		}
 
 		@Override

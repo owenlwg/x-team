@@ -59,12 +59,11 @@ public class HomeFragment extends SherlockFragment {
 	
 	private void addImageView(Context context, View rootView) {
 		LinearLayout layout = (LinearLayout) rootView.findViewById(R.id.head_linerlayout);
-		
+		LayoutParams lp = new LayoutParams((width/4 - 6), LayoutParams.MATCH_PARENT);
+		lp.leftMargin = 3;
+		lp.rightMargin = 3;
 		for (int i = 0; i < 4; i++) {
 			ImageView imageView = new ImageView(context);
-			LayoutParams lp = new LayoutParams((width/4 - 6), LayoutParams.MATCH_PARENT);
-			lp.leftMargin = 3;
-			lp.rightMargin = 3;
 			imageView.setLayoutParams(lp);
 			imageView.setImageResource(R.drawable.owen);
 			imageView.setScaleType(ScaleType.FIT_XY);

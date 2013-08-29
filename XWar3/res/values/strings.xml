@@ -7,5 +7,6 @@
         	</string>
    	<string name="shouye">首页</string>   
 	<string name="zhanyi">战役</string>   
+	<string name="please_wait">加载中...</string>   
    	
 </resources>
