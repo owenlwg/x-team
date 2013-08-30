@@ -134,7 +134,7 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 				tv.setId(i);
 				tv.setTextColor(Color.WHITE);
 				tv.setBackgroundResource(R.drawable.round_icon_selector);
-				tv.setText("" + i);
+				tv.setText("" + (i + 1));
 				tv.setOnClickListener(new OnClickListener() {
 					
 					@Override

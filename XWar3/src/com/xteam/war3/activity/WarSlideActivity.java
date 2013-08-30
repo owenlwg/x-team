@@ -32,6 +32,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.SpannableStringBuilder;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -55,13 +56,15 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 	private SpannableStringBuilder textSpan;
 	private SpannableStringBuilder titleSpan;
 	private TextUtils mTextUtils;
-	private String[] mTitles;
-	private String[] mDescriptions;
+	private static String[] mTitles;
+	private static String[] mDescriptions;
 	private XApplication xApplication;
 	private TextView mTvNumber;
 	private ScrollingMovementMethod scrollingMovementMethod;
 	private Handler mHandler = new Handler();
-
+	private int scrollPosition;
+	private ScrollListener scrollListener;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -69,6 +72,7 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 
 		setContentView(R.layout.war_slide);
 		initPosition = getIntent().getIntExtra("initPosition", 0);
+		scrollPosition = initPosition;
 
 		mTextUtils = new TextUtils(this);
 		textSpan = new SpannableStringBuilder();
@@ -86,13 +90,20 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 		mTvNumber = (TextView) findViewById(R.id.number);
 		mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
 		mPager.setAdapter(mPagerAdapter);
-		mPager.setOffscreenPageLimit(2);
 		mPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 			@Override
 			public void onPageSelected(int position) {
 				mTvNumber.setText((position + 1) + "/10");
 				invalidateOptionsMenu();
 			}
+
+			@Override
+			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+				scrollPosition = position;
+				
+			}
+			
+			
 		});
 		mPager.setCurrentItem(initPosition);
 		mTvNumber.setText((initPosition + 1) + "/10");
@@ -144,13 +155,23 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 			return fragment;
 		}
 
+		@Override
+		public void destroyItem(ViewGroup container, int position, Object object) {
+			container.removeView((View)object); 
+		}
+		
 	}
 
-	public class ScreenSlidePageFragment extends SherlockFragment {
+	public interface ScrollListener {
+		public abstract void initView(int position);
+	}
+	
+	public class ScreenSlidePageFragment extends Fragment {
 		private int mPageNumber;
 		private TextView mTvTitle;
 		private TextView mTvDescription;
 		private Button buttonPlay;
+		private ImageView imageView;
 
 		public ScreenSlidePageFragment() {}
 
@@ -159,31 +180,34 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 			super.onCreate(savedInstanceState);
 			mPageNumber = getArguments().getInt(ARG_PAGE);
 		}
-
+		
+		public void initView(int position) {
+			mHandler.post(new Runnable() {
+				public void run() {
+					int resId = getResources().getIdentifier("a" + (mPageNumber + 1), "drawable", getActivity().getPackageName());
+					imageView.setImageResource(resId);
+					mTvTitle.setTypeface(xApplication.getBoldTypeface());
+					mTextUtils.setTitleStyle(titleSpan, mTitles[mPageNumber]);
+					mTvTitle.setText(mTitles[mPageNumber]);
+					mTvDescription.setTypeface(xApplication.getNormalTypeface());
+					mTextUtils.setTextStyle(textSpan, 7, 8, mDescriptions[mPageNumber]);
+					mTvDescription.setText(textSpan);
+					mTvDescription.setMovementMethod(scrollingMovementMethod);
+				}
+			});
+		}
+		
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
 			ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.war_slide_fragment, 
 					container, false);
 
+			imageView = (ImageView) rootView.findViewById(R.id.imageview);
 			mTvTitle = ((TextView) rootView.findViewById(android.R.id.text1));
 			mTvDescription = ((TextView) rootView.findViewById(R.id.description));
-			mTvDescription.setMovementMethod(scrollingMovementMethod);
-
-			int resId = getResources().getIdentifier("a" + (mPageNumber + 1), "drawable", getActivity().getPackageName());
-			((ImageView) rootView.findViewById(R.id.imageview)).setImageResource(resId);
-			mTvTitle.setTypeface(xApplication.getBoldTypeface());
-			mTextUtils.setTitleStyle(titleSpan, mTitles[mPageNumber]);
-			mTvTitle.setText(titleSpan);
-			mTvDescription.setTypeface(xApplication.getNormalTypeface());
-			mTextUtils.setTextStyle(textSpan, 7, 8, mDescriptions[mPageNumber]);
-			mHandler.postDelayed(new Runnable() {
-				public void run() {
-					mTvDescription.setText(textSpan);
-				}
-			}, 200);
-			
 			buttonPlay = (Button) rootView.findViewById(R.id.button_play);
+			
 			buttonPlay.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -205,10 +229,6 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 			});
 
 			return rootView;
-		}
-
-		public int getPageNumber() {
-			return mPageNumber;
 		}
 
 	}
