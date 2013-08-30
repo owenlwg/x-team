@@ -100,7 +100,6 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 			@Override
 			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 				scrollPosition = position;
-				
 			}
 			
 			
@@ -154,11 +153,6 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 			fragment.setRetainInstance(true);
 			return fragment;
 		}
-
-		@Override
-		public void destroyItem(ViewGroup container, int position, Object object) {
-			container.removeView((View)object); 
-		}
 		
 	}
 
@@ -207,7 +201,6 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 			mTvTitle = ((TextView) rootView.findViewById(android.R.id.text1));
 			mTvDescription = ((TextView) rootView.findViewById(R.id.description));
 			buttonPlay = (Button) rootView.findViewById(R.id.button_play);
-			
 			buttonPlay.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -227,6 +220,8 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 					}.start();
 				}
 			});
+			
+			initView(mPageNumber);
 
 			return rootView;
 		}

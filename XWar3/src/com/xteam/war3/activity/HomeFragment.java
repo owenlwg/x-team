@@ -3,6 +3,7 @@ package com.xteam.war3.activity;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -18,7 +19,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.xteam.war3.application.XApplication;
 import com.xteam.war3.utils.TextUtils;
 
-public class HomeFragment extends SherlockFragment {
+public class HomeFragment extends Fragment {
 
 	private TextView mTvTitle;
 	private TextView mTvDes;
