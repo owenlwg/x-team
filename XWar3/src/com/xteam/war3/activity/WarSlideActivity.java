@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -56,14 +57,11 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 	private SpannableStringBuilder textSpan;
 	private SpannableStringBuilder titleSpan;
 	private TextUtils mTextUtils;
-	private static String[] mTitles;
-	private static String[] mDescriptions;
+	private String[] mTitles;
+	private String[] mDescriptions;
 	private XApplication xApplication;
 	private TextView mTvNumber;
 	private ScrollingMovementMethod scrollingMovementMethod;
-	private Handler mHandler = new Handler();
-	private int scrollPosition;
-	private ScrollListener scrollListener;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +70,6 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 
 		setContentView(R.layout.war_slide);
 		initPosition = getIntent().getIntExtra("initPosition", 0);
-		scrollPosition = initPosition;
 
 		mTextUtils = new TextUtils(this);
 		textSpan = new SpannableStringBuilder();
@@ -96,12 +93,6 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 				mTvNumber.setText((position + 1) + "/10");
 				invalidateOptionsMenu();
 			}
-
-			@Override
-			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-				scrollPosition = position;
-			}
-			
 			
 		});
 		mPager.setCurrentItem(initPosition);
@@ -126,8 +117,6 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 		case R.id.menu_share:
 
 			return true;
-
-
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -156,10 +145,6 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 		
 	}
 
-	public interface ScrollListener {
-		public abstract void initView(int position);
-	}
-	
 	public class ScreenSlidePageFragment extends Fragment {
 		private int mPageNumber;
 		private TextView mTvTitle;
@@ -173,22 +158,6 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			mPageNumber = getArguments().getInt(ARG_PAGE);
-		}
-		
-		public void initView(int position) {
-			mHandler.post(new Runnable() {
-				public void run() {
-					int resId = getResources().getIdentifier("a" + (mPageNumber + 1), "drawable", getActivity().getPackageName());
-					imageView.setImageResource(resId);
-					mTvTitle.setTypeface(xApplication.getBoldTypeface());
-					mTextUtils.setTitleStyle(titleSpan, mTitles[mPageNumber]);
-					mTvTitle.setText(mTitles[mPageNumber]);
-					mTvDescription.setTypeface(xApplication.getNormalTypeface());
-					mTextUtils.setTextStyle(textSpan, 7, 8, mDescriptions[mPageNumber]);
-					mTvDescription.setText(textSpan);
-					mTvDescription.setMovementMethod(scrollingMovementMethod);
-				}
-			});
 		}
 		
 		@Override
@@ -221,12 +190,60 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 				}
 			});
 			
-			initView(mPageNumber);
+			loadDate(mPageNumber);
 
 			return rootView;
 		}
+		
+		public void loadDate(int position) {
+//			new LoadDataAsync().execute(position);
+			int resId = getResources().getIdentifier("a" + (position + 1), "drawable", getActivity().getPackageName());
+			mTextUtils.setTitleStyle(titleSpan, mTitles[position]);
+			mTextUtils.setTextStyle(textSpan, 7, 8, mDescriptions[position]);
+			imageView.setImageResource(resId);
+			mTvTitle.setTypeface(xApplication.getBoldTypeface());
+			mTvTitle.setText(titleSpan);
+			mTvDescription.setTypeface(xApplication.getNormalTypeface());
+			mTvDescription.setText(textSpan);
+			mTvDescription.setMovementMethod(scrollingMovementMethod);
+		}
+		
+		class LoadDataAsync extends AsyncTask<Integer, Void, Integer> {
+
+			@Override
+			protected Integer doInBackground(Integer... mPageNumber) {
+				long s1 = System.currentTimeMillis();
+				Log.e("owen", "doInBackground start:" + s1);
+				int resId = getResources().getIdentifier("a" + (mPageNumber[0] + 1), "drawable", getActivity().getPackageName());
+				mTextUtils.setTitleStyle(titleSpan, mTitles[mPageNumber[0]]);
+				mTextUtils.setTextStyle(textSpan, 7, 8, mDescriptions[mPageNumber[0]]);
+				long s2 = System.currentTimeMillis();
+				Log.e("owen", "doInBackground end:" + s2);
+				Log.e("owen", "time:" + (s2 - s1));
+				
+				return resId;
+			}
+
+			@Override
+			protected void onPostExecute(Integer result) {
+				super.onPostExecute(result);
+				long s1 = System.currentTimeMillis();
+				Log.e("owen", "onPostExecute start:" + s1);
+				imageView.setImageResource(result);
+				mTvTitle.setTypeface(xApplication.getBoldTypeface());
+				mTvTitle.setText(titleSpan);
+				mTvDescription.setTypeface(xApplication.getNormalTypeface());
+				mTvDescription.setText(textSpan);
+				mTvDescription.setMovementMethod(scrollingMovementMethod);
+				long s2 = System.currentTimeMillis();
+				Log.e("owen", "onPostExecute end:" + s2);
+				Log.e("owen", "time:" + (s2 - s1));
+			}
+		}
 
 	}
+	
+
 	
 	private boolean isFlashEnable() {
 		PackageManager pm = getPackageManager();
