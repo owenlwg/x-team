@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.xteam.war3.activity"
+    package="com.xteam.war3"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -8,47 +8,65 @@
         android:targetSdkVersion="17" />
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
     <application
-        android:allowBackup="true" 
         android:name="com.xteam.war3.application.XApplication"
+        android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.Sherlock.Light.DarkActionBar" >
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name" 
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden">
+            android:name="com.xteam.war3.activity.MainActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".WarSlideActivity"
+            android:name="com.xteam.war3.activity.WarSlideActivity"
+            android:configChanges="orientation|keyboardHidden|screenLayout"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden|screenLayout" >
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name=".WebViewActivity"
+            android:name="com.xteam.war3.activity.WebViewActivity"
+            android:configChanges="orientation|keyboardHidden|screenLayout"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
-            android:configChanges="orientation|keyboardHidden|screenLayout" 
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         </activity>
         <activity
-            android:name=".MediaPlayActivity"
+            android:name="com.xteam.war3.activity.MediaPlayActivity"
+            android:configChanges="orientation|keyboardHidden|screenLayout"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
-            android:configChanges="orientation|keyboardHidden|screenLayout" 
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         </activity>
+        <!-- 注册AppActivity -->
+        <activity
+            android:name="com.baidu.mobads.AppActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation" />
+        <!-- 您从百度移动联盟网站获取的APPSID -->
+        <meta-data
+            android:name="BaiduMobAd_APP_ID"
+            android:value="debug" />
+        <!-- 您从百度移动联盟网站获取的计费名 -->
+        <meta-data
+            android:name="BaiduMobAd_APP_SEC"
+            android:value="debug" />
     </application>
 
 </manifest>

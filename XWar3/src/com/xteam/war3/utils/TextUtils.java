@@ -1,6 +1,6 @@
 package com.xteam.war3.utils;
 
-import com.xteam.war3.activity.R;
+import com.xteam.war3.R;
 
 import android.content.Context;
 import android.graphics.Color;

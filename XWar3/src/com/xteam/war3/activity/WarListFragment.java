@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import com.xteam.war3.R;
 
 public class WarListFragment extends Fragment {
 	

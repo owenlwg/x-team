@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 
 import org.json.JSONException;
 
+import com.xteam.war3.R;
 import com.xteam.war3.utils.TextUtils;
 import com.xteam.war3.utils.YoukuUrlUtils;
 

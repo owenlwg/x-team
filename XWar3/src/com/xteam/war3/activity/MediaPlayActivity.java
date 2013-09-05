@@ -12,6 +12,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
+import android.media.MediaPlayer.OnErrorListener;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,7 +23,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
@@ -29,21 +30,21 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.xteam.war3.R;
 import com.xteam.war3.utils.TextUtils;
 import com.xteam.war3.utils.YoukuUrlUtils;
 
-public class MediaPlayActivity extends Activity implements SurfaceHolder.Callback, MediaPlayer.OnPreparedListener {
+public class MediaPlayActivity extends Activity implements SurfaceHolder.Callback, MediaPlayer.OnPreparedListener, OnErrorListener, OnCompletionListener {
 	
 	private static final int WHAT_DELAY = 10;
 	
-	private String gameUrl;
 	private int index;
 	private Context mContext;
 	private TextUtils textUtils;
 	private MediaPlayer mediaPlayer;
-	private SurfaceView surfaceView;
 	private SurfaceHolder surfaceHolder;
 	private ProgressDialog mProgressDialog;
 	private VideoView videoView;
@@ -52,7 +53,6 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 	private Message message;
 	private MediaController mediaController;
 	private TextView mCurrentTv;
-	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +115,7 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 				if (linearLayout.getVisibility() == View.VISIBLE) {
 					linearLayout.setVisibility(View.INVISIBLE);
 				}
-				break;
+				return;
 			default:
 				break;
 			}
@@ -145,7 +145,7 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 						mCurrentTv.setBackgroundResource(R.drawable.round_icon_normal);
 						mCurrentTv = (TextView) view;
 						view.setBackgroundResource(R.drawable.round_icon_select);
-						playVideo2(UrlList.get(view.getId()));
+						playVideo2(view.getId());
 					}
 				});
 				
@@ -154,25 +154,43 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 					mCurrentTv.setBackgroundResource(R.drawable.round_icon_select);
 				}
 				
-				linearLayout.addView(tv);
+				linearLayout.addView(tv, i);
 			}
 			
-			playVideo2(UrlList.get(0));
+			playVideo2(0);
 		} else {
 			finish();
 		}
 	}
 	
 	
-	private void playVideo2(String url) {
-		Log.e("owen", "playVideo url: " + url);
-		if (videoView.isPlaying()) {
-			mProgressDialog = ProgressDialog.show(mContext, "", getString(R.string.please_wait));
-			videoView.stopPlayback();
+	private void playVideo2(int index) {
+		if (index < UrlList.size()) {
+			Log.e("owen", "playVideo url: " + UrlList.get(index));
+			if (videoView.isPlaying()) {
+				mProgressDialog = ProgressDialog.show(mContext, "", getString(R.string.please_wait));
+				videoView.stopPlayback();
+			}
+			videoView.setVideoURI(Uri.parse(UrlList.get(index))); 
+			videoView.setOnPreparedListener(this);
+			videoView.setMediaController(mediaController);
+			videoView.setOnCompletionListener(this);
+			videoView.setOnErrorListener(this);
 		}
-		videoView.setVideoURI(Uri.parse(url)); 
-		videoView.setOnPreparedListener(this);
-		videoView.setMediaController(mediaController);
+	}
+	
+	@Override
+	public void onCompletion(MediaPlayer mp) {
+		if (mCurrentTv.getId() < (UrlList.size() - 1)) {
+			linearLayout.getChildAt((mCurrentTv.getId() + 1)).performClick();
+		}
+	}
+
+	@Override
+	public boolean onError(MediaPlayer mp, int what, int extra) {
+		Toast.makeText(mContext, R.string.can_not_play, Toast.LENGTH_LONG).show();
+		finish();
+		return true;
 	}
 	
     class PlayVideoAsyn extends AsyncTask<Void, Void, Void> {

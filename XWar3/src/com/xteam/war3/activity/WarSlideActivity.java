@@ -45,6 +45,7 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.xteam.war3.R;
 import com.xteam.war3.application.XApplication;
 import com.xteam.war3.utils.TextUtils;
 
@@ -195,7 +196,7 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 			return rootView;
 		}
 		
-		public void loadDate(int position) {
+		private void loadDate(int position) {
 //			new LoadDataAsync().execute(position);
 			int resId = getResources().getIdentifier("a" + (position + 1), "drawable", getActivity().getPackageName());
 			mTextUtils.setTitleStyle(titleSpan, mTitles[position]);

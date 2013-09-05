@@ -8,5 +8,6 @@
    	<string name="shouye">首页</string>   
 	<string name="zhanyi">战役</string>   
 	<string name="please_wait">加载中...</string>   
+	<string name="can_not_play">很抱歉,无法播放此视频</string>   
    	
 </resources>
