@@ -18,13 +18,14 @@ package com.xteam.war3.activity;
 
 import java.util.List;
 
+import org.json.JSONObject;
+
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -43,8 +44,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.baidu.mobads.AdView;
+import com.baidu.mobads.AdViewListener;
 import com.xteam.war3.R;
 import com.xteam.war3.application.XApplication;
 import com.xteam.war3.utils.TextUtils;
