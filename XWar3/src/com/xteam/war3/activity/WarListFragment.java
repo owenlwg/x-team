@@ -1,8 +1,11 @@
 package com.xteam.war3.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.DataSetObserver;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -19,15 +22,17 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.xteam.war3.R;
+import com.xteam.war3.utils.ImageUtils;
 
 public class WarListFragment extends Fragment {
 	
-	private Context mContext;
+	private Activity mContext;
     private String[] mTitles;
     private String[] mDescriptions;
     private ListView mListView;
     private SimpleAdapter simpleAdapter;
-
+    private ImageUtils imageUtils;
+    
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -37,7 +42,7 @@ public class WarListFragment extends Fragment {
         mDescriptions = getResources().getStringArray(R.array.game_text);
         
         simpleAdapter = new SimpleAdapter();
-        
+        imageUtils = new ImageUtils(mContext);
 	}
 
 	@Override
@@ -78,7 +83,10 @@ public class WarListFragment extends Fragment {
 			}
 			
 			int resId = mContext.getResources().getIdentifier("a" + (position + 1), "drawable", mContext.getPackageName());
-			holder.imageView.setImageResource(resId);
+//			holder.imageView.setImageBitmap(imageUtils.decodeBitmapFromResource(resId));
+			imageUtils.loadBitmap(resId, holder.imageView);
+//			holder.imageView.setImageDrawable(null);
+//			new LoadImageAsync(holder.imageView).execute(position);
 			holder.title.setText(mTitles[position]);
 			holder.description.setText(mDescriptions[position].trim());
 			
@@ -102,11 +110,12 @@ public class WarListFragment extends Fragment {
 		
 	}
 	
-	static class ViewHolder {
+	class ViewHolder {
 		ImageView imageView;
 		TextView title;
 		TextView description;
 	}
 	
+
 	
 }

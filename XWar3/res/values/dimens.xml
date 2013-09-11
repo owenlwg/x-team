@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="war_item_width">85dp</dimen>
+    <dimen name="war_item_height">62dp</dimen>
+</resources>
