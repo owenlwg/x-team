@@ -124,6 +124,7 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 	};
 	
 	private void initButton() {
+		linearLayout.removeAllViews();
 		if (UrlList != null && UrlList.size() > 0) {
 			LayoutParams lp = new LayoutParams(48, 38);
 			lp.setMargins(20, 0, 0, 0);
@@ -167,10 +168,6 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 	private void playVideo2(int index) {
 		if (index < UrlList.size()) {
 			Log.e("owen", "playVideo url: " + UrlList.get(index));
-			if (videoView.isPlaying()) {
-				mProgressDialog = ProgressDialog.show(mContext, "", getString(R.string.please_wait));
-				videoView.stopPlayback();
-			}
 			videoView.setVideoURI(Uri.parse(UrlList.get(index))); 
 			videoView.setOnPreparedListener(this);
 			videoView.setMediaController(mediaController);

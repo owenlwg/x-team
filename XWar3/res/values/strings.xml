@@ -2,12 +2,12 @@
 
     <string name="app_name">魔兽十大经典战役</string>
     <string name="title">魔兽争霸十大经典战役</string>
-    <string name="introduction">"       十年War3，我们见证了她的辉煌和陨落，感受了她的荣耀和泪水。没有哪一款游戏可以永葆活力，也没有哪一款游戏可以如War3一样带给我们如此多的财富。
+    <string name="introduction">"       十年War3，我们见证了她的辉煌和陨落，感受了她的荣耀和泪水。没有哪一款游戏可以永葆活力，也没有哪一款游戏可以如War3一样带给我们如此多的激情和回忆。
         时过境迁，当我们成长，当我们踏入社会，当我们热血的游戏岁月渐行渐远的时候，请不要忘记有一款叫作《魔兽争霸3》的游戏陪伴我们走过了人生中最青涩、最美好的年华。"
         	</string>
    	<string name="shouye">首页</string>   
 	<string name="zhanyi">战役</string>   
 	<string name="please_wait">加载中...</string>   
-	<string name="can_not_play">很抱歉,无法播放此视频</string>   
+	<string name="can_not_play">无法播放该视频，需要FLASH插件</string>   
    	
 </resources>
