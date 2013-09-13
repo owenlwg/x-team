@@ -43,7 +43,6 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 	
 	private int index;
 	private Context mContext;
-	private TextUtils textUtils;
 	private MediaPlayer mediaPlayer;
 	private SurfaceHolder surfaceHolder;
 	private ProgressDialog mProgressDialog;
@@ -60,7 +59,6 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 		mContext = this;
 		setContentView(R.layout.play_video_mediaplayer);
 		
-		textUtils = new TextUtils(mContext);
 		Intent intent = getIntent();
 		if (intent != null) {
 			index = intent.getIntExtra("index", 0);
@@ -200,7 +198,7 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 		@Override
 		protected Void doInBackground(Void... params) {
 			try {
-				UrlList = YoukuUrlUtils.getYoukuRealUrl(textUtils.getGameUrl(index));
+				UrlList = YoukuUrlUtils.getYoukuRealUrl(TextUtils.getInstance(mContext).getGameUrl(index));
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}

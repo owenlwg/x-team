@@ -24,7 +24,7 @@ import com.xteam.war3.application.XApplication;
 
 public class HomeFragment extends Fragment {
 
-	private TextView mTvTitle;
+//	private TextView mTvTitle;
 	private TextView mTvDes;
 	private int width;
 	private XApplication xApplication;
@@ -43,12 +43,15 @@ public class HomeFragment extends Fragment {
 		
 		View rootView = inflater.inflate(R.layout.home, container, false);
 		
-		mTvTitle = (TextView) rootView.findViewById(R.id.title);
+//		mTvTitle = (TextView) rootView.findViewById(R.id.title);
 		mTvDes = (TextView) rootView.findViewById(R.id.description);
 		adView = (AdView) rootView.findViewById(R.id.adView);
 		mTvDes.setMovementMethod(new ScrollingMovementMethod());
+//		mTvDes.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
 		
-		mTvTitle.setTypeface(xApplication.getBoldTypeface());
+//		mTvTitle.setTypeface(xApplication.getBoldTypeface());
+//		TextPaint tp = mTvTitle.getPaint(); 
+//		tp.setFakeBoldText(true);
 		mTvDes.setTypeface(xApplication.getNormalTypeface());
 		adView.setListener(new AdViewListener() {
 
@@ -62,7 +65,7 @@ public class HomeFragment extends Fragment {
 
 			public void onAdReady(AdView adView) {
 				Log.w("owen", "onAdReady " + adView);
-				adView.setVisibility(View.VISIBLE);
+//				adView.setVisibility(View.VISIBLE);
 			}
 
 			public void onAdFailed(String reason) {

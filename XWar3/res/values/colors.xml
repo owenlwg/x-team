@@ -9,4 +9,7 @@
     <color name="khaki">#C1B9A9</color>
     <color name="gray_transparent">#B000</color>  
     <color name="light_gray_transparent">#5000</color> 
+    <color name="wet_asphalt">#324A5F</color> 
+    <color name="midnight_blue">#2C3F52</color> 
+    <color name="alizarin">#E94D34</color> 
 </resources>

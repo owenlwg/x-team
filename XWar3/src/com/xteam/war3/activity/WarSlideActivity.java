@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -59,12 +60,12 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 	private int initPosition = 0;
 	private SpannableStringBuilder textSpan;
 	private SpannableStringBuilder titleSpan;
-	private TextUtils mTextUtils;
 	private String[] mTitles;
 	private String[] mDescriptions;
 	private XApplication xApplication;
 	private TextView mTvNumber;
 	private ScrollingMovementMethod scrollingMovementMethod;
+	private Context mContext;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +75,6 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 		setContentView(R.layout.war_slide);
 		initPosition = getIntent().getIntExtra("initPosition", 0);
 
-		mTextUtils = new TextUtils(this);
 		textSpan = new SpannableStringBuilder();
 		titleSpan = new SpannableStringBuilder();
 		scrollingMovementMethod = new ScrollingMovementMethod();
@@ -200,9 +200,9 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 		
 		private void loadDate(int position) {
 //			new LoadDataAsync().execute(position);
-			int resId = getResources().getIdentifier("a" + (position + 1), "drawable", getActivity().getPackageName());
-			mTextUtils.setTitleStyle(titleSpan, mTitles[position]);
-			mTextUtils.setTextStyle(textSpan, 7, 8, mDescriptions[position]);
+			int resId = getResources().getIdentifier("a" + (position + 1), "drawable", xApplication.getPackageName());
+			TextUtils.getInstance(xApplication).setTitleStyle(titleSpan, mTitles[position]);
+			TextUtils.getInstance(xApplication).setTextStyle(textSpan, 7, 8, mDescriptions[position]);
 			imageView.setImageResource(resId);
 			mTvTitle.setTypeface(xApplication.getBoldTypeface());
 			mTvTitle.setText(titleSpan);
@@ -217,9 +217,9 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 			protected Integer doInBackground(Integer... mPageNumber) {
 				long s1 = System.currentTimeMillis();
 				Log.e("owen", "doInBackground start:" + s1);
-				int resId = getResources().getIdentifier("a" + (mPageNumber[0] + 1), "drawable", getActivity().getPackageName());
-				mTextUtils.setTitleStyle(titleSpan, mTitles[mPageNumber[0]]);
-				mTextUtils.setTextStyle(textSpan, 7, 8, mDescriptions[mPageNumber[0]]);
+				int resId = getResources().getIdentifier("a" + (mPageNumber[0] + 1), "drawable", xApplication.getPackageName());
+				TextUtils.getInstance(xApplication).setTitleStyle(titleSpan, mTitles[mPageNumber[0]]);
+				TextUtils.getInstance(xApplication).setTextStyle(textSpan, 7, 8, mDescriptions[mPageNumber[0]]);
 				long s2 = System.currentTimeMillis();
 				Log.e("owen", "doInBackground end:" + s2);
 				Log.e("owen", "time:" + (s2 - s1));

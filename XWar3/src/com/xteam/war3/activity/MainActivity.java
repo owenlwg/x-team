@@ -1,15 +1,10 @@
 package com.xteam.war3.activity;
 
-import org.json.JSONException;
-
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
-import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.xteam.war3.R;
-import com.xteam.war3.utils.YoukuUrlUtils;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

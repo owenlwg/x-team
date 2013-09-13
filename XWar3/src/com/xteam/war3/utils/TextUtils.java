@@ -3,12 +3,10 @@ package com.xteam.war3.utils;
 import com.xteam.war3.R;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
-import android.text.style.StyleSpan;
 
 public class TextUtils {
 	
@@ -17,8 +15,16 @@ public class TextUtils {
 	private ForegroundColorSpan titleForegroundColorSpan;
 	private RelativeSizeSpan relativeSizeSpan;
 //	private StyleSpan styleSpan;
+	private static TextUtils instance;
 	
-	public TextUtils(Context context) {
+	public static TextUtils getInstance(Context context) {
+		if (instance == null) {
+			instance = new TextUtils(context);
+		}
+		return instance;
+	}
+	
+	private TextUtils(Context context) {
 		mContext = context;
 		textForegroundColorSpan = new ForegroundColorSpan(mContext.getResources().getColor(R.color.dark_blue));
 		relativeSizeSpan = new RelativeSizeSpan(1.2f);
@@ -46,6 +52,7 @@ public class TextUtils {
 		return gameUrls[index];
 	}
 	
+/*******************************************************************************************************************/	
 	public static String ToDBC(String input) {
 		   char[] c = input.toCharArray();
 		   for (int i = 0; i< c.length; i++) {
