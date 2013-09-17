@@ -19,102 +19,136 @@ import android.widget.ImageView;
 
 public class ImageUtils {
 
-	private int resultWidth;
-	private int resultHeight;
 	private Bitmap loadingBitmap;
 	private Resources resources;
-	private LruCache<String, Bitmap> lruCache;
+	private static LruCache<String, Bitmap> lruCache;
 
 
 	public ImageUtils(Activity context){
 		resources = context.getResources();
 		loadingBitmap = BitmapFactory.decodeResource(resources, R.drawable.empty_photo);
-		resultWidth = 90;
-		resultHeight = 90;
-		
-		final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-		final int cacheSize = maxMemory / 8;
-		lruCache = new LruCache<String, Bitmap>(cacheSize){
 
-			@Override
-			protected int sizeOf(String key, Bitmap bitmap) {
-				return getByteCount(bitmap) / 1024;
-			}
-			
-		};
-	}
-
-	public void loadBitmap(int resId, ImageView imageView) {
-		final String imageKey = String.valueOf(resId);
-	    final Bitmap bitmap = getBitmapFromMemCache(imageKey);
-	    if (bitmap != null) {
-	    	imageView.setImageBitmap(bitmap);
-	    } else {
-	    	if (cancelPotentialWork(resId, imageView)) {
-	    		final LoadBitmapTask task = new LoadBitmapTask(imageView);
-	    		final AsyncDrawable asyncDrawable = new AsyncDrawable(resources, loadingBitmap, task);
-	    		imageView.setImageDrawable(asyncDrawable);
-	    		task.execute(resId);
-	    	}
-	    }
-	}
-	
-	private boolean cancelPotentialWork(int resId, ImageView imageView) {
-	    final LoadBitmapTask bitmapWorkerTask = getLoadBitmapTask(imageView);
-
-	    if (bitmapWorkerTask != null) {
-	        final int previousResId = bitmapWorkerTask.resId;
-	        if (previousResId != resId) {
-	            // Cancel previous task
-	            bitmapWorkerTask.cancel(true);
-	        } else {
-	            // The same work is already in progress
-	            return false;
-	        }
-	    }
-	    // No task associated with the ImageView, or an existing task was cancelled, or be null
-	    return true;
-	}
-	
-	private LoadBitmapTask getLoadBitmapTask(ImageView imageView) {
-		   if (imageView != null) {
-		       final Drawable drawable = imageView.getDrawable();
-		       if (drawable instanceof AsyncDrawable) {
-		           final AsyncDrawable asyncDrawable = (AsyncDrawable) drawable;
-		           return asyncDrawable.getBitmapWorkerTask();
-		       }
-		    }
-		    return null;
+		if (lruCache == null) {
+			final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+			final int cacheSize = maxMemory / 8;
+			Log.e("owen", "cacheSize:" + cacheSize/1024 + "MB");
+			lruCache = new LruCache<String, Bitmap>(cacheSize){
+				
+				@Override
+				protected int sizeOf(String key, Bitmap bitmap) {
+					return getByteCount(bitmap) / 1024;
+				}
+				
+			};
 		}
+	}
+
+	public void loadBitmap(ImageView imageView, int resId) {
+		LoadBitmapTask task = new LoadBitmapTask(imageView);
+		task.execute(resId);
+	}
 	
+	public void loadBitmap(ImageView imageView, int resId, int reqWidth, int reqHeight) {
+		final String imageKey = String.valueOf(resId);
+		final Bitmap bitmap = getBitmapFromMemCache(imageKey);
+		if (bitmap != null) {
+			imageView.setImageBitmap(bitmap);
+		} else {
+			if (cancelPotentialWork(resId, imageView)) {
+				final LoadBitmapConcurrentTask task = new LoadBitmapConcurrentTask(imageView, true);
+				final AsyncDrawable asyncDrawable = new AsyncDrawable(resources, loadingBitmap, task);
+				imageView.setImageDrawable(asyncDrawable);
+				task.execute(resId, reqWidth, reqHeight);
+			}
+		}
+	}
+
+	private boolean cancelPotentialWork(int resId, ImageView imageView) {
+		final LoadBitmapConcurrentTask bitmapWorkerTask = getLoadBitmapConcurrentTask(imageView);
+
+		if (bitmapWorkerTask != null) {
+			final int previousResId = bitmapWorkerTask.resId;
+			if (previousResId != resId) {
+				bitmapWorkerTask.cancel(true);
+			} else {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private LoadBitmapConcurrentTask getLoadBitmapConcurrentTask(ImageView imageView) {
+		if (imageView != null) {
+			final Drawable drawable = imageView.getDrawable();
+			if (drawable instanceof AsyncDrawable) {
+				final AsyncDrawable asyncDrawable = (AsyncDrawable) drawable;
+				return asyncDrawable.getBitmapWorkerTask();
+			}
+		}
+		return null;
+	}
+
 	class AsyncDrawable extends BitmapDrawable {
-	    private final WeakReference<LoadBitmapTask> LoadBitmapTaskReference;
+		private final WeakReference<LoadBitmapConcurrentTask> taskReference;
 
-	    public AsyncDrawable(Resources res, Bitmap bitmap, LoadBitmapTask bitmapWorkerTask) {
-	        super(res, bitmap);
-	        LoadBitmapTaskReference = new WeakReference<LoadBitmapTask>(bitmapWorkerTask);
-	    }
+		public AsyncDrawable(Resources res, Bitmap bitmap, LoadBitmapConcurrentTask bitmapWorkerTask) {
+			super(res, bitmap);
+			taskReference = new WeakReference<LoadBitmapConcurrentTask>(bitmapWorkerTask);
+		}
 
-	    public LoadBitmapTask getBitmapWorkerTask() {
-	        return LoadBitmapTaskReference.get();
-	    }
+		public LoadBitmapConcurrentTask getBitmapWorkerTask() {
+			return taskReference.get();
+		}
 	}
 	
 	class LoadBitmapTask extends AsyncTask<Integer, Void, Bitmap> {
-
 		private final WeakReference<ImageView> weakReference;
-		private int resId;
 		
 		public LoadBitmapTask(ImageView imageView) {
 			weakReference = new WeakReference<ImageView>(imageView);
 		}
-		
+
 		@Override
 		protected Bitmap doInBackground(Integer... params) {
-//			int resId = resources.getIdentifier("a" + (params[0] + 1), "drawable", mContext.getPackageName());
-			this.resId = params[0];
-			Bitmap bitmap = decodeBitmapFromResource(resId);
-			addBitmapToMemoryCache(String.valueOf(params[0]), bitmap);
+			int resId = params[0];
+			Bitmap bitmap = decodeBitmapFromRes(resId);
+			return bitmap;
+		}
+
+		@Override
+		protected void onPostExecute(Bitmap bitmap) {
+			if (weakReference != null && bitmap != null) {
+				final ImageView imageView = weakReference.get();
+				if (imageView != null) {
+					imageView.setImageBitmap(bitmap);
+				}
+			}
+		}
+		
+	}
+	
+	class LoadBitmapConcurrentTask extends AsyncTask<Integer, Void, Bitmap> {
+
+		private final WeakReference<ImageView> weakReference;
+		private int resId;
+		private boolean isCompress;
+
+		public LoadBitmapConcurrentTask(ImageView imageView, boolean isCompress) {
+			weakReference = new WeakReference<ImageView>(imageView);
+			this.isCompress = isCompress;
+		}
+
+		@Override
+		protected Bitmap doInBackground(Integer... params) {
+			//			int resId = resources.getIdentifier("a" + (params[0] + 1), "drawable", mContext.getPackageName());
+			resId = params[0];
+			Bitmap bitmap = null;
+			if (isCompress) {
+				bitmap = decodeBitmapFromRes(resId, params[1], params[2]);
+			} else {
+				bitmap = decodeBitmapFromRes(resId);
+			}
+			addBitmapToMemoryCache(String.valueOf(resId), bitmap);
 			return bitmap;
 		}
 
@@ -123,36 +157,37 @@ public class ImageUtils {
 			if (isCancelled()) {
 				bitmap = null;
 			}
-			
+
 			if (weakReference != null && bitmap != null) {
 				final ImageView imageView = weakReference.get();
-	            final LoadBitmapTask bitmapWorkerTask = getLoadBitmapTask(imageView);
+				final LoadBitmapConcurrentTask bitmapWorkerTask = getLoadBitmapConcurrentTask(imageView);
 				if (this == bitmapWorkerTask && imageView != null) {
 					imageView.setImageBitmap(bitmap);
 				}
 			}
 		}
-		
+
+	}
+
+	private Bitmap decodeBitmapFromRes(int resId) {
+		return BitmapFactory.decodeResource(resources, resId);
 	}
 	
-	private Bitmap decodeBitmapFromResource(int resId) {
-	    // First decode with inJustDecodeBounds=true to check dimensions
-	    final BitmapFactory.Options options = new BitmapFactory.Options();
-	    options.inJustDecodeBounds = true;
-	    BitmapFactory.decodeResource(resources, resId, options);
-	    // Calculate inSampleSize 
-	    options.inSampleSize = calculateInSampleSize(options, resultWidth, resultHeight);
+	private Bitmap decodeBitmapFromRes(int resId, int reqWidth, int reqHeight) {
+		final BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inJustDecodeBounds = true;
+		BitmapFactory.decodeResource(resources, resId, options);
+		
+		options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
 
-	    // Decode bitmap with inSampleSize set
-	    options.inJustDecodeBounds = false;
-	    options.inPreferredConfig = Config.RGB_565;
-	    Bitmap bitmap = BitmapFactory.decodeResource(resources, resId, options);
-//	    Log.e("owen", "compress ByteCount :" + bitmap.getByteCount());
-	    return bitmap;
+		options.inJustDecodeBounds = false;
+		options.inPreferredConfig = Config.RGB_565;
+		Bitmap bitmap = BitmapFactory.decodeResource(resources, resId, options);
+		//	    Log.e("owen", "compress ByteCount :" + bitmap.getByteCount());
+		return bitmap;
 	}
 
 	private int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
-		// Raw height and width of image
 		final int height = options.outHeight;
 		final int width = options.outWidth;
 		int inSampleSize = 1;
@@ -161,38 +196,35 @@ public class ImageUtils {
 			// Calculate ratios of height and width to requested height and width
 			final int heightRatio = Math.round((float) height / (float) reqHeight);
 			final int widthRatio = Math.round((float) width / (float) reqWidth);
-			// Choose the smallest ratio as inSampleSize value, this will guarantee
-			// a final image with both dimensions larger than or equal to the
-			// requested height and width.
 			inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
 		}
 
 		return inSampleSize;
 	}
-	
+
 	private void addBitmapToMemoryCache(String key, Bitmap bitmap) {
-	    if (getBitmapFromMemCache(key) == null) {
-	        lruCache.put(key, bitmap);
-	    }
-	    
+		if (getBitmapFromMemCache(key) == null) {
+			lruCache.put(key, bitmap);
+		}
 	}
 
 	private Bitmap getBitmapFromMemCache(String key) {
-	    return lruCache.get(key);
+		return lruCache.get(key);
+	}
+
+	private final int getByteCount(Bitmap bitmap) {
+		return bitmap.getRowBytes() * bitmap.getHeight();
 	}
 	
-    private final int getByteCount(Bitmap bitmap) {
-        // int result permits bitmaps up to 46,340 x 46,340
-        return bitmap.getRowBytes() * bitmap.getHeight();
-    }
-//**********************************************************************************
+	
+/**********************************************************************************************************************/
 	public Bitmap compressImage(int resId) {
 		Options options = new Options();
 		Bitmap bitmap = BitmapFactory.decodeResource(resources, resId, options);
 		Log.e("owen", "original ByteCount :" + bitmap.getByteCount());
 		options.inJustDecodeBounds = true;
 		bitmap = BitmapFactory.decodeResource(resources, resId, options);
-		options.inSampleSize = computeSampleSize(options, -1, resultWidth * resultHeight);
+		options.inSampleSize = computeSampleSize(options, -1, 128 * 128);
 		options.inJustDecodeBounds = false;
 		options.inPreferredConfig = Config.RGB_565;
 		options.inPurgeable = true;
@@ -201,7 +233,7 @@ public class ImageUtils {
 		Log.e("owen", "compress ByteCount :" + bitmap.getByteCount());
 		return bitmap;
 	}
-	
+
 	private int computeSampleSize(BitmapFactory.Options options, int minSideLength, int maxNumOfPixels) {
 		int initialSize = computeInitialSampleSize(options, minSideLength, maxNumOfPixels);
 

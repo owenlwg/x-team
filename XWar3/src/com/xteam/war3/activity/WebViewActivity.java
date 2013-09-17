@@ -27,7 +27,6 @@ public class WebViewActivity extends Activity {
 	private String gameUrl;
 	private int index;
 	private Context mContext;
-	private TextUtils textUtils;
 	private MediaPlayer mediaPlayer;
 	
 	@Override
@@ -37,7 +36,6 @@ public class WebViewActivity extends Activity {
 		setContentView(R.layout.play_video_webview);
 		mWebView = (WebView) findViewById(R.id.webView);
 		
-		textUtils = new TextUtils(mContext);
 		Intent intent = getIntent();
 		if (intent != null) {
 			index = intent.getIntExtra("index", 0);

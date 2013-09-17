@@ -84,7 +84,7 @@ public class WarListFragment extends Fragment {
 			
 			int resId = mContext.getResources().getIdentifier("a" + (position + 1), "drawable", mContext.getPackageName());
 //			holder.imageView.setImageBitmap(imageUtils.decodeBitmapFromResource(resId));
-			imageUtils.loadBitmap(resId, holder.imageView);
+			imageUtils.loadBitmap(holder.imageView, resId, 90, 90);
 //			holder.imageView.setImageDrawable(null);
 //			new LoadImageAsync(holder.imageView).execute(position);
 			holder.title.setText(mTitles[position]);

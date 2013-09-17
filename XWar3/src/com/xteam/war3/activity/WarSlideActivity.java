@@ -50,6 +50,7 @@ import com.baidu.mobads.AdView;
 import com.baidu.mobads.AdViewListener;
 import com.xteam.war3.R;
 import com.xteam.war3.application.XApplication;
+import com.xteam.war3.utils.ImageUtils;
 import com.xteam.war3.utils.TextUtils;
 
 public class WarSlideActivity extends SherlockFragmentActivity {
@@ -65,7 +66,7 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 	private XApplication xApplication;
 	private TextView mTvNumber;
 	private ScrollingMovementMethod scrollingMovementMethod;
-	private Context mContext;
+	private ImageUtils imageUtils;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +75,8 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 
 		setContentView(R.layout.war_slide);
 		initPosition = getIntent().getIntExtra("initPosition", 0);
+		
+		imageUtils = new ImageUtils(this);
 
 		textSpan = new SpannableStringBuilder();
 		titleSpan = new SpannableStringBuilder();
@@ -118,10 +121,24 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 			NavUtils.navigateUpTo(this, new Intent(this, MainActivity.class));
 			return true;
 		case R.id.menu_share:
-
+			int number = mPager.getCurrentItem();
+			StringBuilder sb = new StringBuilder();
+			sb.append(getString(R.string.title) + (number + 1));
+			sb.append(":" + mTitles[number]);
+			sb.append(">>" + TextUtils.getInstance(this).getGameUrl(number));
+			sb.append(" " + getString(R.string.share_from));
+			shareText(getString(R.string.share), sb.toString());
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	private void shareText(String title, String text) {
+	    Intent intent = new Intent(Intent.ACTION_SEND);
+	    intent.setType("text/plain");
+	    intent.putExtra(Intent.EXTRA_SUBJECT, title);
+	    intent.putExtra(Intent.EXTRA_TEXT, text);
+	    startActivity(Intent.createChooser(intent, title));
 	}
 
 	
@@ -199,11 +216,10 @@ public class WarSlideActivity extends SherlockFragmentActivity {
 		}
 		
 		private void loadDate(int position) {
-//			new LoadDataAsync().execute(position);
 			int resId = getResources().getIdentifier("a" + (position + 1), "drawable", xApplication.getPackageName());
 			TextUtils.getInstance(xApplication).setTitleStyle(titleSpan, mTitles[position]);
 			TextUtils.getInstance(xApplication).setTextStyle(textSpan, 7, 8, mDescriptions[position]);
-			imageView.setImageResource(resId);
+			imageUtils.loadBitmap(imageView, resId);
 			mTvTitle.setTypeface(xApplication.getBoldTypeface());
 			mTvTitle.setText(titleSpan);
 			mTvDescription.setTypeface(xApplication.getNormalTypeface());

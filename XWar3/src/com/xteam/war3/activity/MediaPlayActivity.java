@@ -37,7 +37,8 @@ import com.xteam.war3.R;
 import com.xteam.war3.utils.TextUtils;
 import com.xteam.war3.utils.YoukuUrlUtils;
 
-public class MediaPlayActivity extends Activity implements SurfaceHolder.Callback, MediaPlayer.OnPreparedListener, OnErrorListener, OnCompletionListener {
+public class MediaPlayActivity extends Activity implements SurfaceHolder.Callback, 
+				MediaPlayer.OnPreparedListener, OnErrorListener, OnCompletionListener {
 	
 	private static final int WHAT_DELAY = 10;
 	

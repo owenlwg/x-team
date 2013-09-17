@@ -9,5 +9,7 @@
 	<string name="zhanyi">战役</string>   
 	<string name="please_wait">加载中...</string>   
 	<string name="can_not_play">无法播放该视频，需要FLASH插件</string>   
+	<string name="share">分享</string>   
+	<string name="share_from">来自魔兽十大经典战役安卓客户端</string>   
    	
 </resources>

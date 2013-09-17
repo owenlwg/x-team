@@ -2,4 +2,5 @@
 <resources>
     <dimen name="war_item_width">85dp</dimen>
     <dimen name="war_item_height">62dp</dimen>
+    <dimen name="war_image_height">190dp</dimen>
 </resources>
