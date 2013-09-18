@@ -65,7 +65,7 @@ public class HomeFragment extends Fragment {
 
 			public void onAdReady(AdView adView) {
 				Log.w("owen", "onAdReady " + adView);
-//				adView.setVisibility(View.VISIBLE);
+				adView.setVisibility(View.VISIBLE);
 			}
 
 			public void onAdFailed(String reason) {

@@ -2,6 +2,7 @@ package com.xteam.war3.activity;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Timer;
 
 import org.json.JSONException;
 
@@ -53,6 +54,7 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 	private Message message;
 	private MediaController mediaController;
 	private TextView mCurrentTv;
+	private View topView;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +73,7 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 //		surfaceHolder = surfaceView.getHolder();
 //		surfaceHolder.addCallback(this);
 //		surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+		topView = findViewById(R.id.rl_top);
 		linearLayout = (LinearLayout) findViewById(R.id.ll_top);
 		videoView = (VideoView) findViewById(R.id.videoView);
 		videoView.setOnTouchListener(new OnTouchListener() {
@@ -78,9 +81,9 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				if (!mediaController.isShowing()) {
-					linearLayout.setVisibility(View.VISIBLE);
+					topView.setVisibility(View.VISIBLE);
 				} else {
-					linearLayout.setVisibility(View.GONE);
+					topView.setVisibility(View.GONE);
 				}
 				mHandler.removeMessages(WHAT_DELAY);
 				message = mHandler.obtainMessage(WHAT_DELAY);
@@ -111,8 +114,8 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case WHAT_DELAY:
-				if (linearLayout.getVisibility() == View.VISIBLE) {
-					linearLayout.setVisibility(View.INVISIBLE);
+				if (topView.getVisibility() == View.VISIBLE) {
+					topView.setVisibility(View.INVISIBLE);
 				}
 				return;
 			default:
@@ -121,6 +124,7 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 		}
 		
 	};
+	
 	
 	private void initButton() {
 		linearLayout.removeAllViews();
@@ -176,6 +180,14 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 	}
 	
 	@Override
+	public void onPrepared(MediaPlayer mp) {
+		if (mProgressDialog != null && mProgressDialog.isShowing()) {
+			mProgressDialog.dismiss();
+		}
+		mp.start();
+	}
+	
+	@Override
 	public void onCompletion(MediaPlayer mp) {
 		if (mCurrentTv.getId() < (UrlList.size() - 1)) {
 			linearLayout.getChildAt((mCurrentTv.getId() + 1)).performClick();
@@ -214,7 +226,11 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 		
     }
 	
+    
 	
+    
+    
+/**********************************************************************************************************************/	
 	private void playVideo(String url) {
 		Log.e("owen", "playVideo url: " + url);
 		
@@ -238,13 +254,6 @@ public class MediaPlayActivity extends Activity implements SurfaceHolder.Callbac
 		
 	}
 	
-	@Override
-	public void onPrepared(MediaPlayer mp) {
-		if (mProgressDialog != null && mProgressDialog.isShowing()) {
-			mProgressDialog.dismiss();
-		}
-		mp.start();
-	}
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
